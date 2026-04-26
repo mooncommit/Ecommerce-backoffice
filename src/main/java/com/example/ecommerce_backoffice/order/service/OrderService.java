@@ -5,6 +5,8 @@ import com.example.ecommerce_backoffice.customer.entity.Customer;
 import com.example.ecommerce_backoffice.customer.repository.CustomerRepository;
 import com.example.ecommerce_backoffice.order.dto.OrderCreateRequestDto;
 import com.example.ecommerce_backoffice.order.dto.OrderCreateResponseDto;
+import com.example.ecommerce_backoffice.order.dto.OrderGetAllResponseDto;
+import com.example.ecommerce_backoffice.order.dto.OrderGetOneResponseDto;
 import com.example.ecommerce_backoffice.order.entity.Order;
 import com.example.ecommerce_backoffice.order.entity.OrderItem;
 import com.example.ecommerce_backoffice.order.enums.OrderStatus;
@@ -14,6 +16,10 @@ import com.example.ecommerce_backoffice.product.entity.Product;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import com.example.ecommerce_backoffice.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,5 +79,32 @@ public class OrderService {
         product.decreaseStock(requestDto.getQuantity());
 
         return OrderCreateResponseDto.from(order, orderItem);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderGetOneResponseDto getOne(Long orderId) {
+        // 주문 조회
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        // 주문 아이템 조회
+        OrderItem orderItem = orderItemRepository.findByOrder(order).orElseThrow(OrderItemNotFoundException::new);
+
+        return OrderGetOneResponseDto.from(order, orderItem);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderGetAllResponseDto> getAll(int page, int size, String keyword, OrderStatus status, String sortBy, String direction) {
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Order> orderPage = orderRepository.findAllWithFilters(keyword,status,pageable);
+
+        return orderPage.map(order -> {
+            OrderItem orderItem = orderItemRepository.findByOrder(order).orElseThrow(OrderItemNotFoundException::new);
+            return OrderGetAllResponseDto.from(order, orderItem);
+        });
     }
 }
