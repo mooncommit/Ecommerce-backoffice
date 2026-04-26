@@ -119,6 +119,16 @@ public class OrderService {
         // 주문 취소 처리
         order.cancel(requestDto.getCancelReason());
 
-        //
+        // 주문 아이템 조회
+        OrderItem orderItem = orderItemRepository.findByOrder(order).orElseThrow(OrderItemNotFoundException::new);
+
+        // 상품 조회
+        Product product = productRepository.findById(orderItem.getProduct().getId()).orElseThrow(ProductNotFoundException::new);
+
+        // 재고 복구
+        product.restoreStock(orderItem.getQuantity());
+
+        // 주문 취소 처리
+        order.cancel(requestDto.getCancelReason());
     }
 }
