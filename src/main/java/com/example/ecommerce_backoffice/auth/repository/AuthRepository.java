@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AuthRepository extends JpaRepository<Admin, Long> {
 
-    Optional<RegisterCreateRequestDto> findByEmail(String email);
+    Optional<Admin> findByEmail(String email);
     boolean existsByEmail(String email);
 
 }
