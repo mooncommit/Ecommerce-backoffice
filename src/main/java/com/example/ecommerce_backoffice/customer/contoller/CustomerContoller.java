@@ -3,6 +3,7 @@ package com.example.ecommerce_backoffice.customer.contoller;
 import com.example.ecommerce_backoffice.customer.dto.CustomerReadAllResponseDto;
 import com.example.ecommerce_backoffice.customer.dto.CustomerReadResponseDto;
 import com.example.ecommerce_backoffice.customer.dto.CustomerUpdateRequestDto;
+import com.example.ecommerce_backoffice.customer.dto.CustomerUpdateStatusRequestDto;
 import com.example.ecommerce_backoffice.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,11 @@ public class CustomerContoller {
     @PatchMapping("/{customerId}")
     public ResponseEntity<CustomerReadResponseDto> updateCustomer(@PathVariable Long customerId,@Valid @RequestBody CustomerUpdateRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.updateCustomer(customerId, requestDto));
+    }
+
+    // 상태 변경
+    @PatchMapping("/{customerId}/status")
+    public ResponseEntity<CustomerReadResponseDto> updateStatus(@PathVariable Long customerId,@Valid @RequestBody CustomerUpdateStatusRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.updateStatus(customerId, requestDto));
     }
 }
