@@ -7,8 +7,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Entity
 @Table(name = "customers")
@@ -38,5 +36,11 @@ public class Customer extends BaseEntity {
         this.email = email;
         this.phone = phone;
         this.status = CustomerStatus.ACTIVE; // 가입시 활성화 상태
+    }
+
+    public void update(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
     }
 }

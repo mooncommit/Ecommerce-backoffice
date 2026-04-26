@@ -3,6 +3,7 @@ package com.example.ecommerce_backoffice.customer.service;
 import com.example.ecommerce_backoffice.common.exception.CustomerNotFoundException;
 import com.example.ecommerce_backoffice.customer.dto.CustomerReadAllResponseDto;
 import com.example.ecommerce_backoffice.customer.dto.CustomerReadResponseDto;
+import com.example.ecommerce_backoffice.customer.dto.CustomerUpdateRequestDto;
 import com.example.ecommerce_backoffice.customer.entity.Customer;
 import com.example.ecommerce_backoffice.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,22 @@ public class CustomerService {
     public CustomerReadResponseDto getCustomer(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(CustomerNotFoundException::new);
+        return new CustomerReadResponseDto(
+                customer.getId(),
+                customer.getName(),
+                customer.getEmail(),
+                customer.getPhone(),
+                customer.getStatus(),
+                customer.getCreatedAt()
+        );
+    }
+
+    // 정보 수정
+    @Transactional
+    public CustomerReadResponseDto updateCustomer(Long id, CustomerUpdateRequestDto requestDto) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(CustomerNotFoundException::new);
+        customer.update(requestDto.getName(), requestDto.getEmail(), requestDto.getPhone());
         return new CustomerReadResponseDto(
                 customer.getId(),
                 customer.getName(),
