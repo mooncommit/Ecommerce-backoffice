@@ -45,4 +45,11 @@ public class CustomerContoller {
     public ResponseEntity<CustomerReadResponseDto> updateStatus(@PathVariable Long customerId,@Valid @RequestBody CustomerUpdateStatusRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.updateStatus(customerId, requestDto));
     }
+
+    // 삭제
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long customerId) {
+        customerService.deleteCustomer(customerId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

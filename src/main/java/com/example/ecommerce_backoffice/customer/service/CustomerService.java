@@ -81,4 +81,12 @@ public class CustomerService {
                 customer.getCreatedAt()
         );
     }
+
+    // 삭제
+    @Transactional
+    public void deleteCustomer(Long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(CustomerNotFoundException::new);
+        customerRepository.delete(customer);
+    }
 }
