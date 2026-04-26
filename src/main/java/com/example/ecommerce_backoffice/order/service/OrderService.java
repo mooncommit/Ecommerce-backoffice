@@ -131,4 +131,29 @@ public class OrderService {
         // 주문 취소 처리
         order.cancel(requestDto.getCancelReason());
     }
+
+    @Transactional
+    public void updateOrderStatus(Long orderId) {
+        // 주문 조회
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        // 취소된 주문은 상태 변경 불가
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            throw new InvalidOrderStatusException();
+        }
+
+        /**
+         *  상태 전환 순서
+         *  PREPARING -> SHIPPING -> DELIVERED
+         */
+
+        if (order.getStatus() == OrderStatus.PREPARING) {
+            order.updateStatus(OrderStatus.SHIPPING);
+        } else if (order.getStatus() == OrderStatus.SHIPPING) {
+            order.updateStatus(OrderStatus.DELIVERED);
+        } else {
+            throw new InvalidOrderStatusException();
+        }
+
+    }
 }
