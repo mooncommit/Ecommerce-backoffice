@@ -1,6 +1,7 @@
 package com.example.ecommerce_backoffice.customer.contoller;
 
 import com.example.ecommerce_backoffice.customer.dto.CustomerReadAllResponseDto;
+import com.example.ecommerce_backoffice.customer.dto.CustomerReadResponseDto;
 import com.example.ecommerce_backoffice.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,5 +23,11 @@ public class CustomerContoller {
     @GetMapping
     public ResponseEntity<List<CustomerReadAllResponseDto>> getAllCustomers() {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.getCustomers());
+    }
+
+    // 단건 조회
+    @GetMapping("/{customerId}")
+    public ResponseEntity<CustomerReadResponseDto> getCustomer(@PathVariable Long customerId) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.getCustomer(customerId));
     }
 }
