@@ -3,10 +3,7 @@ package com.example.ecommerce_backoffice.order.service;
 import com.example.ecommerce_backoffice.common.exception.*;
 import com.example.ecommerce_backoffice.customer.entity.Customer;
 import com.example.ecommerce_backoffice.customer.repository.CustomerRepository;
-import com.example.ecommerce_backoffice.order.dto.OrderCreateRequestDto;
-import com.example.ecommerce_backoffice.order.dto.OrderCreateResponseDto;
-import com.example.ecommerce_backoffice.order.dto.OrderGetAllResponseDto;
-import com.example.ecommerce_backoffice.order.dto.OrderGetOneResponseDto;
+import com.example.ecommerce_backoffice.order.dto.*;
 import com.example.ecommerce_backoffice.order.entity.Order;
 import com.example.ecommerce_backoffice.order.entity.OrderItem;
 import com.example.ecommerce_backoffice.order.enums.OrderStatus;
@@ -15,6 +12,7 @@ import com.example.ecommerce_backoffice.order.repository.OrderRepository;
 import com.example.ecommerce_backoffice.product.entity.Product;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import com.example.ecommerce_backoffice.product.repository.ProductRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -106,5 +104,21 @@ public class OrderService {
             OrderItem orderItem = orderItemRepository.findByOrder(order).orElseThrow(OrderItemNotFoundException::new);
             return OrderGetAllResponseDto.from(order, orderItem);
         });
+    }
+
+    @Transactional
+    public void cancelOrder(Long orderId, @Valid OrderCancelRequestDto requestDto) {
+        // 주문 조회
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        // 준비중 상태에서만 취소 가능
+        if (order.getStatus() != OrderStatus.PREPARING) {
+            throw new OrderCancelNotAllowedException();
+        }
+
+        // 주문 취소 처리
+        order.cancel(requestDto.getCancelReason());
+
+        //
     }
 }

@@ -1,9 +1,6 @@
 package com.example.ecommerce_backoffice.order.controller;
 
-import com.example.ecommerce_backoffice.order.dto.OrderCreateRequestDto;
-import com.example.ecommerce_backoffice.order.dto.OrderCreateResponseDto;
-import com.example.ecommerce_backoffice.order.dto.OrderGetAllResponseDto;
-import com.example.ecommerce_backoffice.order.dto.OrderGetOneResponseDto;
+import com.example.ecommerce_backoffice.order.dto.*;
 import com.example.ecommerce_backoffice.order.enums.OrderStatus;
 import com.example.ecommerce_backoffice.order.service.OrderService;
 import jakarta.validation.Valid;
@@ -40,5 +37,11 @@ public class OrderController {
             @RequestParam(defaultValue = "desc") String direction
     ) {
         return ResponseEntity.ok(orderService.getAll(page, size, keyword, status, sortBy, direction));
+    }
+
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId, @Valid @RequestBody OrderCancelRequestDto requestDto) {
+        orderService.cancelOrder(orderId, requestDto);
+        return ResponseEntity.ok().build();
     }
 }
