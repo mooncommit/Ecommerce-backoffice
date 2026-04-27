@@ -6,13 +6,15 @@ import com.example.ecommerce_backoffice.product.dto.ProductCreateRequestDto;
 import com.example.ecommerce_backoffice.product.dto.ProductCreateResponseDto;
 import com.example.ecommerce_backoffice.product.dto.ProductDetailResponseDto;
 import com.example.ecommerce_backoffice.product.dto.ProductListResponseDto;
+import com.example.ecommerce_backoffice.product.enums.ProductCategory;
+import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import com.example.ecommerce_backoffice.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,10 +32,19 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    // 상품 다건 조회 API
+    // 상품 다건 조회 API (페이징)
     @GetMapping
-    public ResponseEntity<List<ProductListResponseDto>> getProducts() {
-        List<ProductListResponseDto> responseDto = productService.getProducts();
+    public ResponseEntity<Page<ProductListResponseDto>> getProducts(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) ProductStatus status,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortOrder) {
+        Page<ProductListResponseDto> responseDto = productService.getProducts(
+                keyword, category, status, page, size, sortBy, sortOrder);
+
         return ResponseEntity.ok(responseDto);
     }
 
