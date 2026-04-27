@@ -2,8 +2,10 @@ package com.example.ecommerce_backoffice.product.service;
 
 
 import com.example.ecommerce_backoffice.admin.entity.Admin;
+import com.example.ecommerce_backoffice.common.exception.ProductNotFoundException;
 import com.example.ecommerce_backoffice.product.dto.ProductCreateRequestDto;
 import com.example.ecommerce_backoffice.product.dto.ProductCreateResponseDto;
+import com.example.ecommerce_backoffice.product.dto.ProductDetailResponseDto;
 import com.example.ecommerce_backoffice.product.dto.ProductListResponseDto;
 import com.example.ecommerce_backoffice.product.entity.Product;
 import com.example.ecommerce_backoffice.product.repository.ProductRepository;
@@ -50,6 +52,17 @@ public class ProductService {
         return products.stream()
                 .map(ProductListResponseDto::new)
                 .toList();
+    }
+
+    // 상품 단건 조회 - ID로 상품 하나 조회 하고 없으면 예외 발생
+    @Transactional
+    public ProductDetailResponseDto getProduct(Long id) {
+        // ID로 상품 하나 조회 하고 없으면 ProductNotFoundException 던지기
+        Product product = productRepository.findById(id)
+                .orElseThrow(
+                        () -> new ProductNotFoundException());
+        return new ProductDetailResponseDto(product);
+
     }
 
 }

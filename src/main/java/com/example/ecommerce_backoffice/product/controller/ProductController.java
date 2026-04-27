@@ -4,6 +4,7 @@ package com.example.ecommerce_backoffice.product.controller;
 import com.example.ecommerce_backoffice.admin.entity.Admin;
 import com.example.ecommerce_backoffice.product.dto.ProductCreateRequestDto;
 import com.example.ecommerce_backoffice.product.dto.ProductCreateResponseDto;
+import com.example.ecommerce_backoffice.product.dto.ProductDetailResponseDto;
 import com.example.ecommerce_backoffice.product.dto.ProductListResponseDto;
 import com.example.ecommerce_backoffice.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,13 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductListResponseDto>> getProducts() {
         List<ProductListResponseDto> responseDto = productService.getProducts();
+        return ResponseEntity.ok(responseDto);
+    }
+
+    // 상품 단건 조회 API
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDetailResponseDto> getProduct(@PathVariable Long id) {
+        ProductDetailResponseDto responseDto = productService.getProduct(id);
         return ResponseEntity.ok(responseDto);
     }
 }
