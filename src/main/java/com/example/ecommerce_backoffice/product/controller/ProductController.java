@@ -4,14 +4,14 @@ package com.example.ecommerce_backoffice.product.controller;
 import com.example.ecommerce_backoffice.admin.entity.Admin;
 import com.example.ecommerce_backoffice.product.dto.ProductCreateRequestDto;
 import com.example.ecommerce_backoffice.product.dto.ProductCreateResponseDto;
+import com.example.ecommerce_backoffice.product.dto.ProductListResponseDto;
 import com.example.ecommerce_backoffice.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +27,12 @@ public class ProductController {
         Admin admin = null;
         ProductCreateResponseDto responseDto = productService.createProduct(admin, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    // 상품 다건 조회 API
+    @GetMapping
+    public ResponseEntity<List<ProductListResponseDto>> getProducts() {
+        List<ProductListResponseDto> responseDto = productService.getProducts();
+        return ResponseEntity.ok(responseDto);
     }
 }
