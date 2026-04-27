@@ -1,11 +1,15 @@
 package com.example.ecommerce_backoffice.customer.entity;
 
 import com.example.ecommerce_backoffice.common.entity.BaseEntity;
+import com.example.ecommerce_backoffice.common.exception.CustomerNotFoundException;
 import com.example.ecommerce_backoffice.customer.enums.CustomerStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -30,6 +34,8 @@ public class Customer extends BaseEntity {
     @Column(nullable = false)
     private CustomerStatus status;
 
+    private LocalDateTime deletedAt;
+
 
     public Customer(String name, String email, String phone) {
         this.name = name;
@@ -46,5 +52,9 @@ public class Customer extends BaseEntity {
 
     public void updateStatus(CustomerStatus status) {
         this.status = status;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
     }
 }

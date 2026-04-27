@@ -20,7 +20,7 @@ public class CustomerService {
     // 다건 조회
     @Transactional(readOnly = true)
     public List<CustomerReadAllResponseDto> getCustomers() {
-        return customerRepository.findAll().stream()
+        return customerRepository.findAllByDeletedAtIsNull().stream()
                 .map(customer -> new CustomerReadAllResponseDto(
                         customer.getId(),
                         customer.getName(),
@@ -35,7 +35,7 @@ public class CustomerService {
     // 단건 조회
     @Transactional(readOnly = true)
     public CustomerReadResponseDto getCustomer(Long id) {
-        Customer customer = customerRepository.findById(id)
+        Customer customer = customerRepository.findAllByDeletedAtIsNull(id)
                 .orElseThrow(CustomerNotFoundException::new);
         return new CustomerReadResponseDto(
                 customer.getId(),
@@ -73,6 +73,6 @@ public class CustomerService {
     public void deleteCustomer(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(CustomerNotFoundException::new);
-        customerRepository.delete(customer);
+        customer.delete();
     }
 }
