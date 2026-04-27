@@ -5,7 +5,9 @@ import com.example.ecommerce_backoffice.order.enums.OrderStatus;
 import com.example.ecommerce_backoffice.order.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,20 +25,21 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderGetOneResponseDto> getOneOrder(@PathVariable Long orderId) {
-        return ResponseEntity.ok(orderService.getOne(orderId));
+    public ResponseEntity<OrderGetOneResponseDto> getOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.getOrder(orderId));
     }
 
     @GetMapping
-    public ResponseEntity<Page<OrderGetAllResponseDto>> getAllOrder(
-            @RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<OrderPageResponseDto> getOrderList(
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) OrderStatus status,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String direction
     ) {
-        return ResponseEntity.ok(orderService.getAll(page, size, keyword, status, sortBy, direction));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(direction), sortBy));
+        return ResponseEntity.ok(orderService.getOrderList(keyword, status, pageable));
     }
 
     @PatchMapping("/{orderId}")

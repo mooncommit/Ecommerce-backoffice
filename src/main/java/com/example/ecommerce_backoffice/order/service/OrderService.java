@@ -80,7 +80,7 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderGetOneResponseDto getOne(Long orderId) {
+    public OrderGetOneResponseDto getOrder(Long orderId) {
         // 주문 조회
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
@@ -91,19 +91,17 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public Page<OrderGetAllResponseDto> getAll(int page, int size, String keyword, OrderStatus status, String sortBy, String direction) {
-        Sort sort = direction.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
+    public OrderPageResponseDto getOrderList(String keyword, OrderStatus status, Pageable pageable) {
 
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Order> orderPage = orderRepository.findOrder(keyword,status,pageable);
 
-        Page<Order> orderPage = orderRepository.findAllWithFilters(keyword,status,pageable);
-
-        return orderPage.map(order -> {
-            OrderItem orderItem = orderItemRepository.findByOrder(order).orElseThrow(OrderItemNotFoundException::new);
-            return OrderGetAllResponseDto.from(order, orderItem);
+        Page<OrderListResponseDto> dtoPage = orderPage.map(order -> {
+            OrderItem orderItem = orderItemRepository.findByOrder(order)
+                    .orElseThrow(OrderItemNotFoundException::new);
+            return OrderListResponseDto.from(order, orderItem);
         });
+
+        return OrderPageResponseDto.from(dtoPage);
     }
 
     @Transactional
