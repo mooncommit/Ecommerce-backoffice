@@ -65,6 +65,18 @@ public class Product extends BaseEntity {
     // 상품 재고 변경
     public void updateStock(int stock) {
         this.stock = stock;
+
+        // 단종 상태면 상태 유지
+        if (this.status == ProductStatus.DISCONTINUED) {
+            return;
+        }
+
+        // 재고 0 이하 -> 품절 / 재고 1 이상 -> 판매중 재고에 따라 상태 자동으로 전환
+        if (this.stock <= 0) {
+            this.status = ProductStatus.SOLD_OUT;
+        } else {
+            this.status = ProductStatus.ON_SALE;
+        }
     }
 
     // 상품 상태 변경
