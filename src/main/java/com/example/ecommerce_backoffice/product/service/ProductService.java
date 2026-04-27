@@ -131,4 +131,16 @@ public class ProductService {
         // 응답 DTO로 변환 후 반환
         return new ProductStatusResponseDto(savedProduct);
     }
+
+    // 상품 삭제
+    @Transactional
+    public void deleteProduct(Long id) {
+        // ID로 상품 조회 하고 없으면 예외 발생
+        Product product = productRepository.findById(id)
+                .orElseThrow(
+                        () -> new ProductNotFoundException());
+
+        // 상품 삭제
+        productRepository.delete(product);
+    }
 }

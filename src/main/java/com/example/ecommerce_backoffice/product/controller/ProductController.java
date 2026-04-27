@@ -78,4 +78,11 @@ public class ProductController {
         ProductStatusResponseDto responseDto = productService.updateStatus(id, requestDto);
         return ResponseEntity.ok(responseDto);
     }
+
+    // 상품 삭제 API
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
 }
