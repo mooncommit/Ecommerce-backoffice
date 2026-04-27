@@ -1,9 +1,11 @@
 package com.example.ecommerce_backoffice.customer.dto;
 
 import com.example.ecommerce_backoffice.customer.enums.CustomerStatus;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class CustomerReadResponseDto {
 
     private Long id;
@@ -23,24 +25,5 @@ public class CustomerReadResponseDto {
         this.phone = phone;
         this.status = status;
         this.createdAt = createdAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-    public String getName() {
-        return name;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public String getPhone() {
-        return phone;
-    }
-    public CustomerStatus getStatus() {
-        return status;
-    }
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }

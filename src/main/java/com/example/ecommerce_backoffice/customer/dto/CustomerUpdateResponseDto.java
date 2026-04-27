@@ -1,7 +1,9 @@
 package com.example.ecommerce_backoffice.customer.dto;
 
-public class CustomerUpdateResponseDto {
+import lombok.Getter;
 
+@Getter
+public class CustomerUpdateResponseDto {
 
     private String name;
     private String email;
@@ -11,15 +13,5 @@ public class CustomerUpdateResponseDto {
         this.name = name;
         this.email = email;
         this.phone = phone;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public String getPhone() {
-        return phone;
     }
 }
