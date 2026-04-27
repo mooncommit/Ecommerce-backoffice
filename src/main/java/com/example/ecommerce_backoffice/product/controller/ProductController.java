@@ -2,10 +2,7 @@ package com.example.ecommerce_backoffice.product.controller;
 
 
 import com.example.ecommerce_backoffice.admin.entity.Admin;
-import com.example.ecommerce_backoffice.product.dto.ProductCreateRequestDto;
-import com.example.ecommerce_backoffice.product.dto.ProductCreateResponseDto;
-import com.example.ecommerce_backoffice.product.dto.ProductDetailResponseDto;
-import com.example.ecommerce_backoffice.product.dto.ProductListResponseDto;
+import com.example.ecommerce_backoffice.product.dto.*;
 import com.example.ecommerce_backoffice.product.enums.ProductCategory;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import com.example.ecommerce_backoffice.product.service.ProductService;
@@ -52,6 +49,15 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDetailResponseDto> getProduct(@PathVariable Long id) {
         ProductDetailResponseDto responseDto = productService.getProduct(id);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    // 상품 정보 수정 API
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductUpdateResponseDto> updateProduct(
+            @PathVariable Long id,
+            @RequestBody ProductUpdateRequestDto requestDto) {
+        ProductUpdateResponseDto responseDto = productService.updateProduct(id, requestDto);
         return ResponseEntity.ok(responseDto);
     }
 }
