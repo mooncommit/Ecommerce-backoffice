@@ -10,8 +10,8 @@ import lombok.Getter;
 public class ProductCreateRequestDto {
     private String name;
     private ProductCategory category;
-    private Integer price;
-    private Integer stock;
+    private int price;
+    private int stock;
     private ProductStatus status;
 
 }

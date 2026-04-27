@@ -34,11 +34,11 @@ public class Product extends BaseEntity {
 
     // 가격
     @Column(nullable = false)
-    private Integer price;
+    private int price;
 
     // 재고
     @Column(nullable = false)
-    private Integer stock;
+    private int stock;
 
     // 상품 상태 (ON_SALE, SOLD_OUT, DISCONTINUED)
     @Enumerated(EnumType.STRING)
@@ -46,7 +46,7 @@ public class Product extends BaseEntity {
     private ProductStatus status;
 
     // 상품 생성자
-    public Product(Admin admin, String name, ProductCategory category, Integer price, Integer stock, ProductStatus status) {
+    public Product(Admin admin, String name, ProductCategory category, int price, int stock, ProductStatus status) {
         this.admin = admin;
         this.name = name;
         this.category = category;
