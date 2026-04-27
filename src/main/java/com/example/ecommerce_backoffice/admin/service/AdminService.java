@@ -1,6 +1,7 @@
 package com.example.ecommerce_backoffice.admin.service;
 
 import com.example.ecommerce_backoffice.admin.dto.AdminApproveResponseDto;
+import com.example.ecommerce_backoffice.admin.dto.AdminDetailResponseDto;
 import com.example.ecommerce_backoffice.admin.dto.AdminRejectRequestDto;
 import com.example.ecommerce_backoffice.admin.dto.AdminRejectResponseDto;
 import com.example.ecommerce_backoffice.admin.entity.Admin;
@@ -50,4 +51,14 @@ public class AdminService {
             throw new AdminAlreadyProcessedException();
         }
     }
+
+    // 관리자 단건 조회
+    @Transactional(readOnly = true)
+    public AdminDetailResponseDto getAdmin(Long adminId) {
+        Admin admin = adminRepository.findById(adminId)
+                .orElseThrow(AdminNotFoundException::new);
+
+        return AdminDetailResponseDto.from(admin);
+    }
+
 }

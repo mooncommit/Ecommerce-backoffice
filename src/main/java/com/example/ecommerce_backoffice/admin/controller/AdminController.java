@@ -1,17 +1,15 @@
 package com.example.ecommerce_backoffice.admin.controller;
 
 import com.example.ecommerce_backoffice.admin.dto.AdminApproveResponseDto;
+import com.example.ecommerce_backoffice.admin.dto.AdminDetailResponseDto;
 import com.example.ecommerce_backoffice.admin.dto.AdminRejectRequestDto;
 import com.example.ecommerce_backoffice.admin.dto.AdminRejectResponseDto;
 import com.example.ecommerce_backoffice.admin.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admins")
@@ -34,4 +32,11 @@ public class AdminController {
     ) {
         return ResponseEntity.ok(adminService.rejectAdmin(adminId, requestDto));
     }
+
+    // 관리자 단건 조회 API
+    @GetMapping("/{id}")
+    public ResponseEntity<AdminDetailResponseDto> getAdmin(@PathVariable("id") Long adminId) {
+        return ResponseEntity.ok(adminService.getAdmin(adminId));
+    }
+
 }
