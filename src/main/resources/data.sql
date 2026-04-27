@@ -1,0 +1,53 @@
+-- 관리자 승인/거부 테스트용 더미 데이터
+INSERT INTO admins (
+    name,
+    email,
+    password,
+    phone,
+    role,
+    status,
+    approved_at,
+    rejected_at,
+    rejection_reason,
+    created_at,
+    updated_at
+) VALUES
+(
+    '승인대기관리자',
+    'pending_admin@example.com',
+    'dummy-password',
+    '010-1111-1111',
+    'OPERATIONS_ADMIN',
+    'PENDING',
+    NULL,
+    NULL,
+    NULL,
+    NOW(),
+    NOW()
+),
+(
+    '활성관리자',
+    'active_admin@example.com',
+    'dummy-password',
+    '010-2222-2222',
+    'SUPER_ADMIN',
+    'ACTIVE',
+    NOW(),
+    NULL,
+    NULL,
+    NOW(),
+    NOW()
+),
+(
+    '거부관리자',
+    'rejected_admin@example.com',
+    'dummy-password',
+    '010-3333-3333',
+    'CS_ADMIN',
+    'REJECTED',
+    NULL,
+    NOW(),
+    '기존 거부 처리됨',
+    NOW(),
+    NOW()
+);

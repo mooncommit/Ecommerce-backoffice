@@ -58,6 +58,19 @@ public class Admin extends BaseEntity {
         this.role = role;
         this.status = status;
     }
+
+    // 승인 대기 관리자 활성 처리
+    public void approve(LocalDateTime approvedAt) {
+        this.status = AdminStatus.ACTIVE;
+        this.approvedAt = approvedAt;
+        this.rejectedAt = null;
+        this.rejectionReason = null;
+    }
+
+    // 승인 대기 관리자 거부 처리
+    public void reject(LocalDateTime rejectedAt, String rejectionReason) {
+        this.status = AdminStatus.REJECTED;
+        this.rejectedAt = rejectedAt;
+        this.rejectionReason = rejectionReason;
+    }
 }
-
-
