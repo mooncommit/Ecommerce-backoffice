@@ -69,4 +69,13 @@ public class ProductController {
         ProductStockResponseDto responseDto = productService.updateStock(id, requestDto);
         return ResponseEntity.ok(responseDto);
     }
+
+    // 상품 상태 변경 API
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ProductStatusResponseDto> updateStatus(
+            @PathVariable Long id,
+            @RequestBody ProductStatusRequestDto requestDto) {
+        ProductStatusResponseDto responseDto = productService.updateStatus(id, requestDto);
+        return ResponseEntity.ok(responseDto);
+    }
 }

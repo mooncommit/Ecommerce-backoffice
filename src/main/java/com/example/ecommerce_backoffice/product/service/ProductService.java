@@ -113,4 +113,22 @@ public class ProductService {
         // 응답 DTO로 변호나해서 반환
         return new ProductStockResponseDto(savedProduct);
     }
+
+    // 상품 상태 변경
+    @Transactional
+    public ProductStatusResponseDto updateStatus(Long id, ProductStatusRequestDto requestDto) {
+        // ID로 상품 조회 하고 없으면 예외 발생
+        Product product = productRepository.findById(id)
+                .orElseThrow(
+                        () -> new ProductNotFoundException());
+
+        // 상태 변경
+        product.updateStatus(requestDto.getStatus());
+
+        // 변경된 상품 저장
+        Product savedProduct = productRepository.save(product);
+
+        // 응답 DTO로 변환 후 반환
+        return new ProductStatusResponseDto(savedProduct);
+    }
 }
