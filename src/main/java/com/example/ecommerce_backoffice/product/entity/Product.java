@@ -61,6 +61,11 @@ public class Product extends BaseEntity {
         this.category = category;
         this.price = price;
     }
+
+    // 상품 재고 변경
+    public void updateStock(int stock) {
+        this.stock = stock;
+    }
 }
 
 

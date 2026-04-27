@@ -95,4 +95,22 @@ public class ProductService {
         // 수정된 상품을 응답 DTO로 변환해서 반환하기
         return new ProductUpdateResponseDto(savedProduct);
     }
+
+    // 상품 재고 변경
+    @Transactional
+    public ProductStockResponseDto updateStock(Long id, ProductStockRequestDto requestDto) {
+        // ID로 상품 조회 하고 없으면 예외 발생
+        Product product = productRepository.findById(id)
+                .orElseThrow(
+                        () -> new ProductNotFoundException());
+
+        // 재고 변경
+        product.updateStock(requestDto.getStock());
+
+        // 변경된 상품 저장
+        Product savedProduct = productRepository.save(product);
+
+        // 응답 DTO로 변호나해서 반환
+        return new ProductStockResponseDto(savedProduct);
+    }
 }
