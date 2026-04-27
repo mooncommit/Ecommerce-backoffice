@@ -1,9 +1,6 @@
 package com.example.ecommerce_backoffice.customer.contoller;
 
-import com.example.ecommerce_backoffice.customer.dto.CustomerReadAllResponseDto;
-import com.example.ecommerce_backoffice.customer.dto.CustomerReadResponseDto;
-import com.example.ecommerce_backoffice.customer.dto.CustomerUpdateRequestDto;
-import com.example.ecommerce_backoffice.customer.dto.CustomerUpdateStatusRequestDto;
+import com.example.ecommerce_backoffice.customer.dto.*;
 import com.example.ecommerce_backoffice.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/customers")
-public class CustomerContoller {
+public class CustomerController {
 
     // 속성
     private final CustomerService customerService;
@@ -36,14 +33,14 @@ public class CustomerContoller {
 
     // 정보 수정
     @PatchMapping("/{customerId}")
-    public ResponseEntity<CustomerReadResponseDto> updateCustomer(@PathVariable Long customerId,@Valid @RequestBody CustomerUpdateRequestDto requestDto) {
+    public ResponseEntity<CustomerUpdateResponseDto> updateCustomer(@PathVariable Long customerId, @Valid @RequestBody CustomerUpdateRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.updateCustomer(customerId, requestDto));
     }
 
     // 상태 변경
     @PatchMapping("/{customerId}/status")
-    public ResponseEntity<CustomerReadResponseDto> updateStatus(@PathVariable Long customerId,@Valid @RequestBody CustomerUpdateStatusRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.updateStatus(customerId, requestDto));
+    public ResponseEntity<Void> updateStatus(@PathVariable Long customerId,@Valid @RequestBody CustomerUpdateStatusRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     // 삭제
