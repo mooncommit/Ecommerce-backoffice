@@ -2,31 +2,29 @@ package com.example.ecommerce_backoffice.auth.controller;
 
 import com.example.ecommerce_backoffice.admin.entity.Admin;
 import com.example.ecommerce_backoffice.auth.dto.LoginRequestDto;
-import com.example.ecommerce_backoffice.auth.dto.RegisterCreateRequestDto;
+import com.example.ecommerce_backoffice.auth.dto.SignupCreateRequestDto;
 import com.example.ecommerce_backoffice.auth.dto.SessionAdmin;
 import com.example.ecommerce_backoffice.auth.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.springframework.boot.web.server.servlet.Session;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin")
+@RequiredArgsConstructor
+@RequestMapping("/admins")
 public class AuthController {
     //속성
-    private AuthService authService;
-    //생성자
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
+    private final AuthService authService;
+
     //기능
 
     //회원가입
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterCreateRequestDto request) {
-        Admin admin= authService.createRegister(request);
+    @PostMapping("/signup")
+    public ResponseEntity<String> register(@Valid @RequestBody SignupCreateRequestDto request) {
+        authService.createRegister(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("관리자등록이 완료되었습니다. 슈퍼 관리자의 승인이 있어야 로그인 가능합니다.");
     }
 
@@ -48,12 +46,9 @@ public class AuthController {
     public ResponseEntity<String> adminLogin(@Valid @RequestBody LoginRequestDto request, HttpSession session ) {
         Admin admin = authService.loginAdmin(request);
         SessionAdmin sessionAdmin = new SessionAdmin(admin);
-        session.setAttribute("loginAdmin",sessionAdmin );
-        //세션 유효시간 설정 -> 안건드리고 1800초(30분)지나면 꺼짐
-        session.setMaxInactiveInterval(1800);
+        session.setAttribute("loginAdmin", sessionAdmin);
 
-
-        return ResponseEntity.status(HttpStatus.OK).body("로그인 성공.");
+        return ResponseEntity.ok("로그인 성공!");
     }
 
     @PostMapping("/logout")
@@ -67,9 +62,9 @@ public class AuthController {
         if (sessionAdmin==null){
             return ResponseEntity.badRequest().build();
         }
-        //로그아웃 성공 상태 명세서대로 200 OK 일단 했슴니다.
+
         session.invalidate();
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
         //return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

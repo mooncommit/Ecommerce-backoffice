@@ -1,4 +1,4 @@
-package com.example.ecommerce_backoffice.auth.config;
+package com.example.ecommerce_backoffice.common.config;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.example.ecommerce_backoffice.auth.repository.AuthRepository;
 import org.springframework.stereotype.Component;

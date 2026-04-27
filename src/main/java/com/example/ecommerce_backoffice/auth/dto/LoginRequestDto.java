@@ -10,6 +10,7 @@ public class LoginRequestDto {
     /**
      * 이메일과 비밀번호를 입력받기
      */
+
     //속성
             @NotBlank(message = "이메일 입력은 필수입니다.")
     private String email;

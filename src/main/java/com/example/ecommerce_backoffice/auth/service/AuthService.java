@@ -2,11 +2,13 @@ package com.example.ecommerce_backoffice.auth.service;
 
 import com.example.ecommerce_backoffice.admin.entity.Admin;
 import com.example.ecommerce_backoffice.admin.enums.AdminStatus;
-import com.example.ecommerce_backoffice.auth.config.PasswordEncoder;
+import com.example.ecommerce_backoffice.common.config.PasswordEncoder;
 import com.example.ecommerce_backoffice.auth.dto.LoginRequestDto;
-import com.example.ecommerce_backoffice.auth.dto.RegisterCreateRequestDto;
+import com.example.ecommerce_backoffice.auth.dto.SignupCreateRequestDto;
 import com.example.ecommerce_backoffice.auth.repository.AuthRepository;
 import com.example.ecommerce_backoffice.common.exception.AdminNotApprovedException;
+import com.example.ecommerce_backoffice.common.exception.DuplicateEmailException;
+import com.example.ecommerce_backoffice.common.exception.InvalidAdminStatusException;
 import com.example.ecommerce_backoffice.common.exception.InvalidPasswordException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +33,9 @@ public class AuthService {
 
 
     @Transactional
-    public Admin createRegister(RegisterCreateRequestDto request) {
+    public Admin createRegister(SignupCreateRequestDto request) {
         if (authRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
+            throw new DuplicateEmailException();
         }
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
@@ -70,13 +72,12 @@ public class AuthService {
             throw new InvalidPasswordException();
         }
 
-        //익셉션 엔티티에 찾아봐도 안보여서 일단 일리걸아규먼트익셉션 사용헷슴미다.
         if (admin.getStatus() != AdminStatus.ACTIVE) {
             switch (admin.getStatus()) {
-                case INACTIVE -> throw new IllegalArgumentException("비활성화된 계정");
-                case SUSPENDED -> throw new IllegalArgumentException("정지된 계정");
+                case INACTIVE -> throw new InvalidAdminStatusException("비활성화된 계정");
+                case SUSPENDED -> throw new InvalidAdminStatusException("정지된 계정");
                 case PENDING -> throw new AdminNotApprovedException();
-                case REJECTED -> throw new IllegalArgumentException("거부된 계정");
+                case REJECTED -> throw new InvalidAdminStatusException("거부된 계정");
             }
         }
 
