@@ -6,6 +6,7 @@ import com.example.ecommerce_backoffice.product.dto.*;
 import com.example.ecommerce_backoffice.product.enums.ProductCategory;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import com.example.ecommerce_backoffice.product.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class ProductController {
 
     // 상품 등록
     @PostMapping
-    public ResponseEntity<ProductCreateResponseDto> createProduct(@RequestBody ProductCreateRequestDto requestDto) {
+    public ResponseEntity<ProductCreateResponseDto> createProduct(@Valid @RequestBody ProductCreateRequestDto requestDto) {
         Admin admin = null;
         ProductCreateResponseDto responseDto = productService.createProduct(admin, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
@@ -56,7 +57,7 @@ public class ProductController {
     @PatchMapping("/{id}")
     public ResponseEntity<ProductUpdateResponseDto> updateProduct(
             @PathVariable Long id,
-            @RequestBody ProductUpdateRequestDto requestDto) {
+            @Valid @RequestBody ProductUpdateRequestDto requestDto) {
         ProductUpdateResponseDto responseDto = productService.updateProduct(id, requestDto);
         return ResponseEntity.ok(responseDto);
     }
@@ -65,7 +66,7 @@ public class ProductController {
     @PatchMapping("/{id}/stock")
     public ResponseEntity<ProductStockResponseDto> updateStock(
             @PathVariable Long id,
-            @RequestBody ProductStockRequestDto requestDto) {
+            @Valid @RequestBody ProductStockRequestDto requestDto) {
         ProductStockResponseDto responseDto = productService.updateStock(id, requestDto);
         return ResponseEntity.ok(responseDto);
     }
@@ -74,7 +75,7 @@ public class ProductController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<ProductStatusResponseDto> updateStatus(
             @PathVariable Long id,
-            @RequestBody ProductStatusRequestDto requestDto) {
+            @Valid @RequestBody ProductStatusRequestDto requestDto) {
         ProductStatusResponseDto responseDto = productService.updateStatus(id, requestDto);
         return ResponseEntity.ok(responseDto);
     }

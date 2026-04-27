@@ -8,7 +8,7 @@ import com.example.ecommerce_backoffice.product.entity.Product;
 import com.example.ecommerce_backoffice.product.enums.ProductCategory;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import com.example.ecommerce_backoffice.product.repository.ProductRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,7 +45,7 @@ public class ProductService {
     }
 
     // 상품 다건 조회 (검색 + 필터 + 페이징 + 정렬)
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<ProductListResponseDto> getProducts(
             String keyword, ProductCategory category, ProductStatus status,
             int page, int size, String sortBy, String sortOrder) {
@@ -65,12 +65,11 @@ public class ProductService {
     }
 
     // 상품 단건 조회 - ID로 상품 하나 조회 하고 없으면 예외 발생
-    @Transactional
+    @Transactional(readOnly = true)
     public ProductDetailResponseDto getProduct(Long id) {
         // ID로 상품 하나 조회 하고 없으면 ProductNotFoundException 던지기
         Product product = productRepository.findById(id)
-                .orElseThrow(
-                        () -> new ProductNotFoundException());
+                .orElseThrow(ProductNotFoundException::new);
         return new ProductDetailResponseDto(product);
     }
 
@@ -79,8 +78,7 @@ public class ProductService {
     public ProductUpdateResponseDto updateProduct(Long id, ProductUpdateRequestDto requestDto) {
         // ID로 상품 조회 하고 없으면 예외 발생
         Product product = productRepository.findById(id)
-                .orElseThrow(
-                        () -> new ProductNotFoundException());
+                .orElseThrow(ProductNotFoundException::new);
 
         // 상품 정보 수정
         product.updateInfo(
@@ -101,9 +99,7 @@ public class ProductService {
     public ProductStockResponseDto updateStock(Long id, ProductStockRequestDto requestDto) {
         // ID로 상품 조회 하고 없으면 예외 발생
         Product product = productRepository.findById(id)
-                .orElseThrow(
-                        () -> new ProductNotFoundException());
-
+                .orElseThrow(ProductNotFoundException::new);
         // 재고 변경
         product.updateStock(requestDto.getStock());
 
@@ -119,8 +115,7 @@ public class ProductService {
     public ProductStatusResponseDto updateStatus(Long id, ProductStatusRequestDto requestDto) {
         // ID로 상품 조회 하고 없으면 예외 발생
         Product product = productRepository.findById(id)
-                .orElseThrow(
-                        () -> new ProductNotFoundException());
+                .orElseThrow(ProductNotFoundException::new);
 
         // 상태 변경
         product.updateStatus(requestDto.getStatus());
@@ -137,8 +132,7 @@ public class ProductService {
     public void deleteProduct(Long id) {
         // ID로 상품 조회 하고 없으면 예외 발생
         Product product = productRepository.findById(id)
-                .orElseThrow(
-                        () -> new ProductNotFoundException());
+                .orElseThrow(ProductNotFoundException::new);
 
         // 상품 삭제
         productRepository.delete(product);
