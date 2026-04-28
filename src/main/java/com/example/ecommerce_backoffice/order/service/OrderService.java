@@ -1,6 +1,8 @@
 package com.example.ecommerce_backoffice.order.service;
 
 import com.example.ecommerce_backoffice.admin.entity.Admin;
+import com.example.ecommerce_backoffice.admin.repository.AdminRepository;
+import com.example.ecommerce_backoffice.common.dto.SessionAdmin;
 import com.example.ecommerce_backoffice.common.exception.*;
 import com.example.ecommerce_backoffice.customer.entity.Customer;
 import com.example.ecommerce_backoffice.customer.repository.CustomerRepository;
@@ -33,6 +35,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
+    private final AdminRepository adminRepository;
 
     @Transactional
     public OrderCreateResponseDto createOrder(OrderCreateRequestDto requestDto, HttpSession session) {
