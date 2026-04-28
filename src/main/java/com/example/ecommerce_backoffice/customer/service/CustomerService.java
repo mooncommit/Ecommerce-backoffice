@@ -29,16 +29,16 @@ public class CustomerService {
 
     // 단건 조회
     @Transactional(readOnly = true)
-    public CustomerDetailResponseDto getCustomer(Long id) {
-        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(id)
+    public CustomerDetailResponseDto getCustomer(Long customerId) {
+        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(customerId)
                 .orElseThrow(CustomerNotFoundException::new);
         return CustomerDetailResponseDto.from(customer);
     }
 
     // 정보 수정
     @Transactional
-    public CustomerUpdateResponseDto updateCustomer(Long id, CustomerUpdateRequestDto requestDto) {
-        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(id)
+    public CustomerUpdateResponseDto updateCustomer(Long customerId, CustomerUpdateRequestDto requestDto) {
+        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(customerId)
                 .orElseThrow(CustomerNotFoundException::new);
         customer.update(requestDto.getName(), requestDto.getEmail(), requestDto.getPhone());
         return CustomerUpdateResponseDto.from(customer);
@@ -46,16 +46,16 @@ public class CustomerService {
 
     // 상태 변경
     @Transactional
-    public void updateStatus(Long id, CustomerUpdateStatusRequestDto requestDto) {
-        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(id)
+    public void updateStatus(Long customerId, CustomerUpdateStatusRequestDto requestDto) {
+        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(customerId)
                 .orElseThrow(CustomerNotFoundException::new);
         customer.updateStatus(requestDto.getStatus());
     }
 
     // 삭제
     @Transactional
-    public void deleteCustomer(Long id) {
-        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(id)
+    public void deleteCustomer(Long customerId) {
+        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(customerId)
                 .orElseThrow(CustomerNotFoundException::new);
         customer.delete();
     }
