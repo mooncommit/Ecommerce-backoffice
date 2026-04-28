@@ -9,10 +9,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
-// 상품 재고 변경 응답 DTO
+// 상품 상태 변경 응답 DTO
 @RequiredArgsConstructor
 @Getter
-public class ProductStockResponseDto {
+public class ProductStatusUpdateResponseDto {
     private final Long id;
     private final String name;
     private final ProductCategory category;
@@ -22,8 +22,8 @@ public class ProductStockResponseDto {
     private final LocalDateTime createdAt;
 
     // Product 엔티티를 응답 DTO로 변환하는 생성자
-    public static ProductStockResponseDto from(Product product) {
-        return new ProductStockResponseDto(
+    public static ProductStatusUpdateResponseDto from(Product product) {
+        return new ProductStatusUpdateResponseDto(
                 product.getId(),
                 product.getName(),
                 product.getCategory(),

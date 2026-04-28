@@ -5,6 +5,6 @@ import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import lombok.Getter;
 
 @Getter
-public class ProductStatusRequestDto {
+public class ProductStatusUpdateRequestDto {
     private ProductStatus status;
 }

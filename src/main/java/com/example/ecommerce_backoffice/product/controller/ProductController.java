@@ -59,13 +59,13 @@ public class ProductController {
 
     // 상품 재고 변경 API
     @PatchMapping("/{productId}/stock")
-    public ResponseEntity<ProductStockResponseDto> updateStock(@PathVariable Long productId, @Valid @RequestBody ProductStockRequestDto requestDto) {
+    public ResponseEntity<ProductStockUpdateResponseDto> updateStock(@PathVariable Long productId, @Valid @RequestBody ProductStockUpdateRequestDto requestDto) {
         return ResponseEntity.ok(productService.updateStock(productId, requestDto));
     }
 
     // 상품 상태 변경 API
     @PatchMapping("/{productId}/status")
-    public ResponseEntity<ProductStatusResponseDto> updateStatus(@PathVariable Long productId, @Valid @RequestBody ProductStatusRequestDto requestDto) {
+    public ResponseEntity<ProductStatusUpdateResponseDto> updateStatus(@PathVariable Long productId, @Valid @RequestBody ProductStatusUpdateRequestDto requestDto) {
         return ResponseEntity.ok(productService.updateStatus(productId, requestDto));
     }
 

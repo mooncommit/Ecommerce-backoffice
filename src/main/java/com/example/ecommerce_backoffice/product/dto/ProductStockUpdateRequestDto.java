@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 
 @Getter
-public class ProductStockRequestDto {
+public class ProductStockUpdateRequestDto {
 
     @Min(0)
     private int stock;
