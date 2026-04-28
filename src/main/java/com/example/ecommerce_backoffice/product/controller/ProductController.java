@@ -1,14 +1,13 @@
 package com.example.ecommerce_backoffice.product.controller;
 
 
-import com.example.ecommerce_backoffice.admin.entity.Admin;
 import com.example.ecommerce_backoffice.product.dto.*;
 import com.example.ecommerce_backoffice.product.enums.ProductCategory;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import com.example.ecommerce_backoffice.product.service.ProductService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,10 +26,8 @@ public class ProductController {
 
     // 상품 등록
     @PostMapping
-    public ResponseEntity<ProductCreateResponseDto> createProduct(@Valid @RequestBody ProductCreateRequestDto requestDto) {
-        Admin admin = null;
-        ProductCreateResponseDto responseDto = productService.createProduct(admin, requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    public ResponseEntity<ProductCreateResponseDto> createProduct(@Valid @RequestBody ProductCreateRequestDto requestDto, HttpSession session) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.createProduct(requestDto, session));
     }
 
     // 상품 다건 조회 API (페이징)
@@ -49,43 +46,33 @@ public class ProductController {
     }
 
     // 상품 단건 조회 API
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductDetailResponseDto> getProduct(@PathVariable Long id) {
-        ProductDetailResponseDto responseDto = productService.getProduct(id);
-        return ResponseEntity.ok(responseDto);
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDetailResponseDto> getProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok(productService.getProduct(productId));
     }
 
     // 상품 정보 수정 API
-    @PatchMapping("/{id}")
-    public ResponseEntity<ProductUpdateResponseDto> updateProduct(
-            @PathVariable Long id,
-            @Valid @RequestBody ProductUpdateRequestDto requestDto) {
-        ProductUpdateResponseDto responseDto = productService.updateProduct(id, requestDto);
-        return ResponseEntity.ok(responseDto);
+    @PatchMapping("/{productId}")
+    public ResponseEntity<ProductUpdateResponseDto> updateProduct(@PathVariable Long productId, @Valid @RequestBody ProductUpdateRequestDto requestDto) {
+        return ResponseEntity.ok(productService.updateProduct(productId, requestDto));
     }
 
     // 상품 재고 변경 API
-    @PatchMapping("/{id}/stock")
-    public ResponseEntity<ProductStockResponseDto> updateStock(
-            @PathVariable Long id,
-            @Valid @RequestBody ProductStockRequestDto requestDto) {
-        ProductStockResponseDto responseDto = productService.updateStock(id, requestDto);
-        return ResponseEntity.ok(responseDto);
+    @PatchMapping("/{productId}/stock")
+    public ResponseEntity<ProductStockResponseDto> updateStock(@PathVariable Long productId, @Valid @RequestBody ProductStockRequestDto requestDto) {
+        return ResponseEntity.ok(productService.updateStock(productId, requestDto));
     }
 
     // 상품 상태 변경 API
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<ProductStatusResponseDto> updateStatus(
-            @PathVariable Long id,
-            @Valid @RequestBody ProductStatusRequestDto requestDto) {
-        ProductStatusResponseDto responseDto = productService.updateStatus(id, requestDto);
-        return ResponseEntity.ok(responseDto);
+    @PatchMapping("/{productId}/status")
+    public ResponseEntity<ProductStatusResponseDto> updateStatus(@PathVariable Long productId, @Valid @RequestBody ProductStatusRequestDto requestDto) {
+        return ResponseEntity.ok(productService.updateStatus(productId, requestDto));
     }
 
     // 상품 삭제 API
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.ok().build();
     }
 }

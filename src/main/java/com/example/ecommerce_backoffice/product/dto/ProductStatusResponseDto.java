@@ -5,28 +5,32 @@ import com.example.ecommerce_backoffice.product.entity.Product;
 import com.example.ecommerce_backoffice.product.enums.ProductCategory;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 // 상품 상태 변경 응답 DTO
+@RequiredArgsConstructor
 @Getter
 public class ProductStatusResponseDto {
-    private Long id;
-    private String name;
-    private ProductCategory category;
-    private int price;
-    private int stock;
-    private ProductStatus status;
-    private LocalDateTime createdAt;
+    private final Long id;
+    private final String name;
+    private final ProductCategory category;
+    private final int price;
+    private final int stock;
+    private final ProductStatus status;
+    private final LocalDateTime createdAt;
 
     // Product 엔티티를 응답 DTO로 변환하는 생성자
-    public ProductStatusResponseDto(Product product) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.category = product.getCategory();
-        this.price = product.getPrice();
-        this.stock = product.getStock();
-        this.status = product.getStatus();
-        this.createdAt = product.getCreatedAt();
+    public static ProductStatusResponseDto from(Product product) {
+        return new ProductStatusResponseDto(
+                product.getId(),
+                product.getName(),
+                product.getCategory(),
+                product.getPrice(),
+                product.getStock(),
+                product.getStatus(),
+                product.getCreatedAt()
+        );
     }
 }

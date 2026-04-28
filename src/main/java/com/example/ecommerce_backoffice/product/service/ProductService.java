@@ -2,12 +2,14 @@ package com.example.ecommerce_backoffice.product.service;
 
 
 import com.example.ecommerce_backoffice.admin.entity.Admin;
+import com.example.ecommerce_backoffice.common.exception.AdminNotFoundException;
 import com.example.ecommerce_backoffice.common.exception.ProductNotFoundException;
 import com.example.ecommerce_backoffice.product.dto.*;
 import com.example.ecommerce_backoffice.product.entity.Product;
 import com.example.ecommerce_backoffice.product.enums.ProductCategory;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import com.example.ecommerce_backoffice.product.repository.ProductRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,11 +23,14 @@ public class ProductService {
 
     // DB 접근용
     private final ProductRepository productRepository;
+    private final AdminRepository adminRepository;
 
     // 상품 등록 - 요청 데이터 받아서 DB에 저장 후 응답 반환
     @Transactional
-    public ProductCreateResponseDto createProduct(Admin admin, ProductCreateRequestDto requestDto) {
-        // 1. 요청 데이터로 Product 엔티티 생성하기
+    public ProductCreateResponseDto createProduct(ProductCreateRequestDto requestDto, HttpSession session) {
+        SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
+        Admin admin = adminRepository.findById(sessionAdmin.getId()).orElseThrow(AdminNotFoundException::new);
+
         Product product = new Product(
                 admin,
                 requestDto.getName(),
@@ -35,11 +40,8 @@ public class ProductService {
                 requestDto.getStatus()
         );
 
-        // 2. DB에 저장하기
-        Product savedProduct = productRepository.save(product);
-
-        // 3. 저장딘 엔티티를 응답 DTO로 변환해서 반환하기
-        return new ProductCreateResponseDto(savedProduct);
+        // 저장딘 엔티티를 응답 DTO로 변환해서 반환하기
+        return ProductCreateResponseDto.from(productRepository.save(product));
     }
 
     // 상품 다건 조회 (검색 + 필터 + 페이징 + 정렬)
@@ -58,18 +60,20 @@ public class ProductService {
 
     // 상품 단건 조회 - ID로 상품 하나 조회 하고 없으면 예외 발생
     @Transactional(readOnly = true)
-    public ProductDetailResponseDto getProduct(Long id) {
+    public ProductDetailResponseDto getProduct(Long productId) {
+
         // ID로 상품 하나 조회 하고 없으면 ProductNotFoundException 던지기
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
-        return new ProductDetailResponseDto(product);
+
+        return ProductDetailResponseDto.from(product);
     }
 
     // 상품 정보 수정 - 상품명, 카테고리, 가격만 변경
     @Transactional
-    public ProductUpdateResponseDto updateProduct(Long id, ProductUpdateRequestDto requestDto) {
+    public ProductUpdateResponseDto updateProduct(Long productId, ProductUpdateRequestDto requestDto) {
         // ID로 상품 조회 하고 없으면 예외 발생
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
         // 상품 정보 수정
@@ -78,55 +82,44 @@ public class ProductService {
                 requestDto.getCategory(),
                 requestDto.getPrice()
         );
-
-        // 수정된 상품 저장
-        Product savedProduct = productRepository.save(product);
-
         // 수정된 상품을 응답 DTO로 변환해서 반환하기
-        return new ProductUpdateResponseDto(savedProduct);
+        return ProductUpdateResponseDto.from(product);
     }
 
     // 상품 재고 변경
     @Transactional
-    public ProductStockResponseDto updateStock(Long id, ProductStockRequestDto requestDto) {
+    public ProductStockResponseDto updateStock(Long productId, ProductStockRequestDto requestDto) {
         // ID로 상품 조회 하고 없으면 예외 발생
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
         // 재고 변경
         product.updateStock(requestDto.getStock());
 
-        // 변경된 상품 저장
-        Product savedProduct = productRepository.save(product);
-
         // 응답 DTO로 변호나해서 반환
-        return new ProductStockResponseDto(savedProduct);
+        return ProductStockResponseDto.from(product);
     }
 
     // 상품 상태 변경
     @Transactional
-    public ProductStatusResponseDto updateStatus(Long id, ProductStatusRequestDto requestDto) {
+    public ProductStatusResponseDto updateStatus(Long productId, ProductStatusRequestDto requestDto) {
         // ID로 상품 조회 하고 없으면 예외 발생
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
         // 상태 변경
         product.updateStatus(requestDto.getStatus());
 
-        // 변경된 상품 저장
-        Product savedProduct = productRepository.save(product);
-
         // 응답 DTO로 변환 후 반환
-        return new ProductStatusResponseDto(savedProduct);
+        return ProductStatusResponseDto.from(product);
     }
 
     // 상품 삭제
     @Transactional
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Long productId) {
         // ID로 상품 조회 하고 없으면 예외 발생
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findByIdAndDeletedAtIsNull(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        // 상품 삭제
-        productRepository.delete(product);
+        product.delete();
     }
 }

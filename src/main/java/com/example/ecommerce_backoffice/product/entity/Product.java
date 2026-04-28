@@ -9,6 +9,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Table(name = "products")
@@ -44,6 +46,8 @@ public class Product extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductStatus status;
+
+    private LocalDateTime deletedAt;
 
     // 상품 생성자
     public Product(Admin admin, String name, ProductCategory category, int price, int stock, ProductStatus status) {
@@ -82,6 +86,26 @@ public class Product extends BaseEntity {
     // 상품 상태 변경
     public void updateStatus(ProductStatus status) {
         this.status = status;
+    }
+
+    // 주문 시 재고차감 메서드
+    public void decreaseStock(int quantity) {
+        this.stock -= quantity;
+        if (this.stock <= 0) {
+            this.status = ProductStatus.SOLD_OUT;
+        }
+    }
+
+    // 주문 취소 시 재고복구 메서드
+    public void restoreStock(int quantity) {
+        this.stock += quantity;
+        if (this.status != ProductStatus.DISCONTINUED) {
+            this.status = ProductStatus.ON_SALE;
+        }
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
     }
 }
 
