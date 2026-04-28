@@ -38,7 +38,7 @@ public class CustomerService {
     // 정보 수정
     @Transactional
     public CustomerUpdateResponseDto updateCustomer(Long id, CustomerUpdateRequestDto requestDto) {
-        Customer customer = customerRepository.findById(id)
+        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(CustomerNotFoundException::new);
         customer.update(requestDto.getName(), requestDto.getEmail(), requestDto.getPhone());
         return CustomerUpdateResponseDto.from(customer);
@@ -47,7 +47,7 @@ public class CustomerService {
     // 상태 변경
     @Transactional
     public void updateStatus(Long id, CustomerUpdateStatusRequestDto requestDto) {
-        Customer customer = customerRepository.findById(id)
+        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(CustomerNotFoundException::new);
         customer.updateStatus(requestDto.getStatus());
     }

@@ -19,5 +19,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             @Param("status") CustomerStatus status,
             Pageable pageable
     );
-    Optional<Customer> findByIdAndDeletedAtIsNull(Long id);
+    Optional<Customer> findByIdAndDeletedAtIsNull(Long customerId);
 }

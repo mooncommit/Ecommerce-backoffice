@@ -9,15 +9,14 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 public class CustomerPageResponseDto {
-    //속성
+
     private final int currentPage;
     private final int pageSize;
     private final long totalCount;
     private final int totalPages;
-    private final List<CustomerListResponseDto> content;
+    private final List<CustomerListResponseDto> customerList;
 
 
-    // 기능
     public static CustomerPageResponseDto from(Page<CustomerListResponseDto> page) {
         return new CustomerPageResponseDto(
                 page.getNumber() + 1,

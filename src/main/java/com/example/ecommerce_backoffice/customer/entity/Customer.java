@@ -1,13 +1,11 @@
 package com.example.ecommerce_backoffice.customer.entity;
 
 import com.example.ecommerce_backoffice.common.entity.BaseEntity;
-import com.example.ecommerce_backoffice.common.exception.CustomerNotFoundException;
 import com.example.ecommerce_backoffice.customer.enums.CustomerStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
