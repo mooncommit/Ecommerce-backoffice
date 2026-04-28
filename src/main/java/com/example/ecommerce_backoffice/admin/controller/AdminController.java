@@ -56,24 +56,24 @@ public class AdminController {
     @PatchMapping("/{adminId}")
     public ResponseEntity<AdminUpdateResponseDto> updateAdmin(
             @PathVariable Long adminId,
-            @Valid @RequestBody AdminUpdateRequestDto request) {
-        return ResponseEntity.ok(adminService.updateAdmin(adminId, request));
+            @Valid @RequestBody AdminUpdateRequestDto requestDto) {
+        return ResponseEntity.ok(adminService.updateAdmin(adminId, requestDto));
     }
 
     // 관리자 역할 수정 API
     @PatchMapping("/{adminId}/role")
     public ResponseEntity<AdminRoleUpdateResponseDto> updateAdminRole(
             @PathVariable Long adminId,
-            @Valid @RequestBody AdminRoleUpdateRequestDto request) {
-        return ResponseEntity.ok(adminService.updateAdminRole(adminId, request));
+            @Valid @RequestBody AdminRoleUpdateRequestDto requestDto) {
+        return ResponseEntity.ok(adminService.updateAdminRole(adminId, requestDto));
     }
 
     // 관리자 상태 수정 API
     @PatchMapping("/{adminId}/status")
     public ResponseEntity<AdminStatusUpdateResponseDto> updateAdminStatus(
             @PathVariable Long adminId,
-            @Valid @RequestBody AdminStatusUpdateRequestDto request) {
-        return ResponseEntity.ok(adminService.updateAdminStatus(adminId, request));
+            @Valid @RequestBody AdminStatusUpdateRequestDto requestDto) {
+        return ResponseEntity.ok(adminService.updateAdminStatus(adminId, requestDto));
     }
 
 
@@ -87,27 +87,23 @@ public class AdminController {
 
     // 내(로그인한 유저) 프로필 조회 API
     @GetMapping("/me")
-    public ResponseEntity<AdminProfileGetResponseDto> getProfile(HttpSession httpSession) {
-        return ResponseEntity.ok(adminService.getProfile(httpSession));
+    public ResponseEntity<AdminProfileGetResponseDto> getProfile(HttpSession session) {
+        return ResponseEntity.ok(adminService.getProfile(session));
     }
+
     // 내(로그인한 유저) 프로필 수정 API
     @PatchMapping("/me")
     public ResponseEntity<AdminProfilePatchResponseDto> patchProfile(
-            HttpSession httpSession,
-            @Valid @RequestBody AdminProfileRequestPatchDto request) {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProfile(httpSession, request));
+            HttpSession session,
+            @Valid @RequestBody AdminProfilePatchRequestDto requestDto) {
+        return ResponseEntity.ok(adminService.updateProfile(session, requestDto));
     }
 
     // 비밀번호 변경 API
     @PatchMapping("/me/password")
     public ResponseEntity<AdminPasswordUpdateResponseDto> passwordUpdateAdmin(
-            HttpSession httpSession,
-            @Valid @RequestBody AdminPasswordUpdateRequestDto request) {
-        return ResponseEntity.ok(adminService.updateAdminPassword(httpSession, request));
+            HttpSession session,
+            @Valid @RequestBody AdminPasswordUpdateRequestDto requestDto) {
+        return ResponseEntity.ok(adminService.updateAdminPassword(session, requestDto));
     }
 }
-
-
-
-
-

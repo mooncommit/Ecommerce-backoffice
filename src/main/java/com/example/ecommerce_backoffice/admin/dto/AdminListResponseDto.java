@@ -7,9 +7,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-// 관리자 List 응답 DTO
+// 관리자 목록 조회 응답 DTO
 @Getter
 @RequiredArgsConstructor
 public class AdminListResponseDto {
@@ -23,7 +22,7 @@ public class AdminListResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime approvedAt;
 
-    // 관리자 List를 응답 DTO로 변환
+    // 엔티티를 관리자 목록 응답 DTO로 변환
     public static AdminListResponseDto from(Admin admin) {
         return new AdminListResponseDto(
                 admin.getId(),
@@ -36,6 +35,4 @@ public class AdminListResponseDto {
                 admin.getApprovedAt()
         );
     }
-
-
 }

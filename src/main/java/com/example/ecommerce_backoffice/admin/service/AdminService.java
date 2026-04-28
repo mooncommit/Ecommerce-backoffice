@@ -5,11 +5,12 @@ import com.example.ecommerce_backoffice.admin.entity.Admin;
 import com.example.ecommerce_backoffice.admin.enums.AdminRole;
 import com.example.ecommerce_backoffice.admin.enums.AdminStatus;
 import com.example.ecommerce_backoffice.admin.repository.AdminRepository;
+import com.example.ecommerce_backoffice.common.config.PasswordEncoder;
+import com.example.ecommerce_backoffice.common.dto.SessionAdmin;
 import com.example.ecommerce_backoffice.common.exception.AdminAlreadyProcessedException;
 import com.example.ecommerce_backoffice.common.exception.AdminNotFoundException;
 import com.example.ecommerce_backoffice.common.exception.PasswordMismatchException;
 import com.example.ecommerce_backoffice.common.exception.UnauthorizedException;
-import com.example.ecommerce_backoffice.config.PasswordEncoder;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     // 승인 대기 상태 관리자 승인 처리
+    @Transactional
     public AdminApproveResponseDto approveAdmin(Long adminId) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
@@ -39,8 +40,8 @@ public class AdminService {
         return AdminApproveResponseDto.from(admin);
     }
 
-    @Transactional
     // 거부 사유 포함 관리자 거부 처리
+    @Transactional
     public AdminRejectResponseDto rejectAdmin(Long adminId, AdminRejectRequestDto requestDto) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
@@ -77,14 +78,14 @@ public class AdminService {
 
     // 관리자 정보 수정
     @Transactional
-    public AdminUpdateResponseDto updateAdmin(Long adminId, AdminUpdateRequestDto request) {
+    public AdminUpdateResponseDto updateAdmin(Long adminId, AdminUpdateRequestDto requestDto) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
         admin.update(
-                request.getName(),
-                request.getEmail(),
-                request.getPhone()
+                requestDto.getName(),
+                requestDto.getEmail(),
+                requestDto.getPhone()
         );
 
         return AdminUpdateResponseDto.from(admin);
@@ -92,11 +93,11 @@ public class AdminService {
 
     // 관리자 역할 수정
     @Transactional
-    public AdminRoleUpdateResponseDto updateAdminRole(Long adminId, AdminRoleUpdateRequestDto request) {
+    public AdminRoleUpdateResponseDto updateAdminRole(Long adminId, AdminRoleUpdateRequestDto requestDto) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
-        admin.roleUpdate(request.getRole());
+        admin.roleUpdate(requestDto.getRole());
 
         return AdminRoleUpdateResponseDto.from(admin);
 
@@ -104,18 +105,18 @@ public class AdminService {
 
     // 관리자 상태 수정
     @Transactional
-    public AdminStatusUpdateResponseDto updateAdminStatus(Long adminId, AdminStatusUpdateRequestDto request) {
+    public AdminStatusUpdateResponseDto updateAdminStatus(Long adminId, AdminStatusUpdateRequestDto requestDto) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
-        admin.statusUpdate(request.getStatus());
+        admin.statusUpdate(requestDto.getStatus());
 
         return AdminStatusUpdateResponseDto.from(admin);
     }
 
     // 관리자 삭제
     @Transactional
-    public void deleteAdmin(Long adminId){
+    public void deleteAdmin(Long adminId) {
         Admin foundAdmin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
@@ -139,7 +140,7 @@ public class AdminService {
 
     // 내 프로필 수정
     @Transactional
-    public AdminProfilePatchResponseDto updateProfile(HttpSession session, AdminProfileRequestPatchDto request) {
+    public AdminProfilePatchResponseDto updateProfile(HttpSession session, AdminProfilePatchRequestDto requestDto) {
         SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
 
         if (sessionAdmin == null) {
@@ -150,9 +151,9 @@ public class AdminService {
                 .orElseThrow(AdminNotFoundException::new);
 
         admin.update(
-                request.getName(),
-                request.getEmail(),
-                request.getPhone()
+                requestDto.getName(),
+                requestDto.getEmail(),
+                requestDto.getPhone()
         );
         return AdminProfilePatchResponseDto.from(admin);
     }
@@ -161,8 +162,7 @@ public class AdminService {
     @Transactional
     public AdminPasswordUpdateResponseDto updateAdminPassword(
             HttpSession session,
-            AdminPasswordUpdateRequestDto request
-    ) {
+            AdminPasswordUpdateRequestDto requestDto) {
         SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
 
         if (sessionAdmin == null) {
@@ -172,11 +172,11 @@ public class AdminService {
         Admin admin = adminRepository.findById(sessionAdmin.getId())
                 .orElseThrow(AdminNotFoundException::new);
 
-        if (!passwordEncoder.matches(request.getCurrentPassword(), admin.getPassword())) {
+        if (!passwordEncoder.matches(requestDto.getCurrentPassword(), admin.getPassword())) {
             throw new PasswordMismatchException();
         }
 
-        admin.passwordUpdate(passwordEncoder.encode(request.getNewPassword()));
+        admin.passwordUpdate(passwordEncoder.encode(requestDto.getNewPassword()));
 
         return new AdminPasswordUpdateResponseDto("비밀번호가 변경되었습니다.");
     }

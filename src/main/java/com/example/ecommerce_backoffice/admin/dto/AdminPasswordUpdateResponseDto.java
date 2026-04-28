@@ -1,6 +1,5 @@
 package com.example.ecommerce_backoffice.admin.dto;
 
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +9,4 @@ import lombok.RequiredArgsConstructor;
 public class AdminPasswordUpdateResponseDto {
 
     private final String message;
-
-
 }
