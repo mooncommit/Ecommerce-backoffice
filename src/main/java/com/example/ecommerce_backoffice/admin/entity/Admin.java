@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * 관리자 테이블
- */
 @Getter
 @Entity
 @Table(name = "admins")
@@ -42,12 +39,8 @@ public class Admin extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AdminStatus status;
-
-    // 관리자 승인 시각
     private LocalDateTime approvedAt;
-    // 관리자 거부 시간
     private LocalDateTime rejectedAt;
-    // 관리자 거부 사유
     private String rejectionReason;
 
     public Admin(String name, String email, String password, String phone, AdminRole role, AdminStatus status) {
@@ -58,6 +51,46 @@ public class Admin extends BaseEntity {
         this.role = role;
         this.status = status;
     }
+
+    // 관리자 상태 변경
+    public void changeStatus(AdminStatus status) {
+        this.status = status;
+    }
+
+    // 승인 대기 관리자 활성 처리
+    public void approve(LocalDateTime approvedAt) {
+        this.status = AdminStatus.ACTIVE;
+        this.approvedAt = approvedAt;
+        this.rejectedAt = null;
+        this.rejectionReason = null;
+    }
+
+    // 승인 대기 관리자 거부 처리
+    public void reject(LocalDateTime rejectedAt, String rejectionReason) {
+        this.status = AdminStatus.REJECTED;
+        this.rejectedAt = rejectedAt;
+        this.rejectionReason = rejectionReason;
+    }
+
+    // 관리자 정보 수정
+    public void update(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    // 관리자 역할 수정
+    public void roleUpdate(AdminRole role) {
+        this.role = role;
+    }
+
+    // 관리자 상태 수정
+    public void statusUpdate(AdminStatus status) {
+        this.status = status;
+    }
+
+    // 비밀번호 수정
+    public void passwordUpdate(String password) {
+        this.password = password;
+    }
 }
-
-
