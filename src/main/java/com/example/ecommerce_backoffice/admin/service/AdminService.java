@@ -92,7 +92,7 @@ public class AdminService {
 
     // 관리자 역할 수정
     @Transactional
-    public AdminRoleUpdateResponseDto roleUpdateAdmin(Long adminId, AdminRoleUpdateRequestDto request) {
+    public AdminRoleUpdateResponseDto updateAdminRole(Long adminId, AdminRoleUpdateRequestDto request) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
@@ -104,7 +104,7 @@ public class AdminService {
 
     // 관리자 상태 수정
     @Transactional
-    public AdminStatusUpdateResponseDto statusUpdateAdmin(Long adminId, AdminStatusUpdateRequestDto request) {
+    public AdminStatusUpdateResponseDto updateAdminStatus(Long adminId, AdminStatusUpdateRequestDto request) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
@@ -125,7 +125,7 @@ public class AdminService {
     // 내 프로필 조회
     @Transactional(readOnly = true)
     public AdminProfileGetResponseDto getProfile(HttpSession session) {
-        SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("admin");
+        SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
 
         if (sessionAdmin == null) {
             throw new UnauthorizedException();
@@ -140,7 +140,7 @@ public class AdminService {
     // 내 프로필 수정
     @Transactional
     public AdminProfilePatchResponseDto updateProfile(HttpSession session, AdminProfileRequestPatchDto request) {
-        SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("admin");
+        SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
 
         if (sessionAdmin == null) {
             throw new UnauthorizedException();
@@ -163,7 +163,7 @@ public class AdminService {
             HttpSession session,
             AdminPasswordUpdateRequestDto request
     ) {
-        SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("admin");
+        SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
 
         if (sessionAdmin == null) {
             throw new UnauthorizedException();

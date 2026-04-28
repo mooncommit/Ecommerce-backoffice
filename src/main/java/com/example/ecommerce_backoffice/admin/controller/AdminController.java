@@ -62,26 +62,26 @@ public class AdminController {
 
     // 관리자 역할 수정 API
     @PatchMapping("/{adminId}/role")
-    public ResponseEntity<AdminRoleUpdateResponseDto> roleUpdateAdmin(
+    public ResponseEntity<AdminRoleUpdateResponseDto> updateAdminRole(
             @PathVariable Long adminId,
             @Valid @RequestBody AdminRoleUpdateRequestDto request) {
-        return ResponseEntity.ok(adminService.roleUpdateAdmin(adminId, request));
+        return ResponseEntity.ok(adminService.updateAdminRole(adminId, request));
     }
 
     // 관리자 상태 수정 API
     @PatchMapping("/{adminId}/status")
-    public ResponseEntity<AdminStatusUpdateResponseDto> statusUpdateAdmin(
+    public ResponseEntity<AdminStatusUpdateResponseDto> updateAdminStatus(
             @PathVariable Long adminId,
             @Valid @RequestBody AdminStatusUpdateRequestDto request) {
-        return ResponseEntity.ok(adminService.statusUpdateAdmin(adminId, request));
+        return ResponseEntity.ok(adminService.updateAdminStatus(adminId, request));
     }
 
 
     // 관리자 삭제 API
     @DeleteMapping("/{adminId}")
-    public ResponseEntity<Void> deleteAdmins(
-            @PathVariable Long adminId){
-            adminService.deleteAdmin(adminId);
+    public ResponseEntity<Void> deleteAdmin(
+            @PathVariable Long adminId) {
+        adminService.deleteAdmin(adminId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -94,7 +94,7 @@ public class AdminController {
     @PatchMapping("/me")
     public ResponseEntity<AdminProfilePatchResponseDto> patchProfile(
             HttpSession httpSession,
-            @Valid @RequestBody AdminProfileRequestPatchDto request){
+            @Valid @RequestBody AdminProfileRequestPatchDto request) {
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProfile(httpSession, request));
     }
 
@@ -106,7 +106,6 @@ public class AdminController {
         return ResponseEntity.ok(adminService.updateAdminPassword(httpSession, request));
     }
 }
-
 
 
 
