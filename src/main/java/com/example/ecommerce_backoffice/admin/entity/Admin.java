@@ -43,6 +43,11 @@ public class Admin extends BaseEntity {
     @Column(nullable = false)
     private AdminStatus status;
 
+    //관리자 상태 변경 기능
+    public void changeStatus(AdminStatus status) {
+        this.status = status;
+    }
+
     // 관리자 승인 시각
     private LocalDateTime approvedAt;
     // 관리자 거부 시간
@@ -72,5 +77,27 @@ public class Admin extends BaseEntity {
         this.status = AdminStatus.REJECTED;
         this.rejectedAt = rejectedAt;
         this.rejectionReason = rejectionReason;
+    }
+
+    // 관리자 정보 수정
+    public void update(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    // 관리자 역할 수정
+    public void roleUpdate(AdminRole role) {
+        this.role = role;
+    }
+
+    // 관리자 상태 수정
+    public void statusUpdate(AdminStatus status) {
+        this.status = status;
+    }
+
+    //비밀번호 수정 기능
+    public void passwordUpdate(String password){
+        this.password = password;
     }
 }
