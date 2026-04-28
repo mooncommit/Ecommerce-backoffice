@@ -3,6 +3,7 @@ package com.example.ecommerce_backoffice.customer.service;
 import com.example.ecommerce_backoffice.common.exception.CustomerNotFoundException;
 import com.example.ecommerce_backoffice.customer.dto.*;
 import com.example.ecommerce_backoffice.customer.entity.Customer;
+import com.example.ecommerce_backoffice.customer.enums.CustomerStatus;
 import com.example.ecommerce_backoffice.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,17 +29,10 @@ public class CustomerService {
 
     // 단건 조회
     @Transactional(readOnly = true)
-    public CustomerReadResponseDto getCustomer(Long id) {
-        Customer customer = customerRepository.findAllByDeletedAtIsNull(id)
+    public CustomerDetailResponseDto getCustomer(Long id) {
+        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(CustomerNotFoundException::new);
-        return new CustomerReadResponseDto(
-                customer.getId(),
-                customer.getName(),
-                customer.getEmail(),
-                customer.getPhone(),
-                customer.getStatus(),
-                customer.getCreatedAt()
-        );
+        return CustomerDetailResponseDto.from(customer);
     }
 
     // 정보 수정
@@ -61,7 +55,7 @@ public class CustomerService {
     // 삭제
     @Transactional
     public void deleteCustomer(Long id) {
-        Customer customer = customerRepository.findById(id)
+        Customer customer = customerRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(CustomerNotFoundException::new);
         customer.delete();
     }

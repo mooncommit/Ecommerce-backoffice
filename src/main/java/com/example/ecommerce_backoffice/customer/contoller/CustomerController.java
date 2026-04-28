@@ -37,14 +37,14 @@ public class CustomerController {
 
     // 단건 조회
     @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerReadResponseDto> getCustomer(@PathVariable Long customerId) {
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.getCustomer(customerId));
+    public ResponseEntity<CustomerDetailResponseDto> getCustomer(@PathVariable Long customerId) {
+        return ResponseEntity.ok(customerService.getCustomer(customerId));
     }
 
     // 정보 수정
     @PatchMapping("/{customerId}")
     public ResponseEntity<CustomerUpdateResponseDto> updateCustomer(@PathVariable Long customerId, @Valid @RequestBody CustomerUpdateRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.updateCustomer(customerId, requestDto));
+        return ResponseEntity.ok(customerService.updateCustomer(customerId, requestDto));
     }
 
     @PatchMapping("/{customerId}/status")
