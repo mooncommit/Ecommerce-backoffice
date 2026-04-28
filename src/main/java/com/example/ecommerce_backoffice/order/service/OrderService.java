@@ -60,7 +60,7 @@ public class OrderService {
 
         // 주문 번호 자동 생성
         String orderNumber = "ORD-"
-                + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyymmdd"))
+                + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                 + "-"
                 + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
 
