@@ -7,9 +7,7 @@ import lombok.Getter;
 @Getter
 public class LoginRequestDto {
 
-    /**
-     * 이메일과 비밀번호를 입력받기
-     */
+
 
     //속성
             @NotBlank(message = "이메일 입력은 필수입니다.")
@@ -17,8 +15,4 @@ public class LoginRequestDto {
             @NotBlank(message = "비밀번호 입력은 필수입니다.")
     private String password;
 
-    //생성자
-
-
-    //기능
 }
