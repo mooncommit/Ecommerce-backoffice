@@ -51,7 +51,7 @@ public class ProductService {
 
         // DB에서 검색 + 필터 + 페이징 조회
         Page<Product> productPage = productRepository.findProduct(keyword, category, status, pageable);
-        Page<ProductListResponseDto> dtoPage = productPage.map(ProductListResponseDto::new);
+        Page<ProductListResponseDto> dtoPage = productPage.map(ProductListResponseDto::from);
 
         // Product 엔티티를 응답 DTO로 변환 후 반환하기
         return ProductPageResponseDto.from(dtoPage);

@@ -27,7 +27,7 @@ public class ProductController {
     // 상품 등록
     @PostMapping
     public ResponseEntity<ProductCreateResponseDto> createProduct(@Valid @RequestBody ProductCreateRequestDto requestDto, HttpSession session) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.createProduct(requestDto, session));
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(requestDto, session));
     }
 
     // 상품 다건 조회 API (페이징)
@@ -41,7 +41,7 @@ public class ProductController {
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortOrder) {
 
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortOrder)));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         return ResponseEntity.ok(productService.getProducts(keyword, category, status, pageable));
     }
 
@@ -73,6 +73,6 @@ public class ProductController {
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
         productService.deleteProduct(productId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
