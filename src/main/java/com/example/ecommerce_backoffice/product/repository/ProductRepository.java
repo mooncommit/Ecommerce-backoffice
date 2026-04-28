@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     // 검색 + 필터 + 페이징 조회
-    @Query("SELECT p FROM Product p WHERE " +
+    @Query("SELECT p FROM Product p WHERE p.deletedAt IS NULL AND " +
             "(:keyword IS NULL OR p.name LIKE %:keyword%) AND " +
             "(:category IS NULL OR p.category = :category) AND " +
             "(:status IS NULL OR p.status = :status)")
