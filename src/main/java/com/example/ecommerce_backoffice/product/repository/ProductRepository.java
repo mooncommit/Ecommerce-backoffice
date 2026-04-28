@@ -21,9 +21,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "(:status IS NULL OR p.status = :status)")
     Page<Product> findProduct(
             @Param("keyword") String keyword,
-            @Param("category")ProductCategory category,
-            @Param("status")ProductStatus status,
+            @Param("category") ProductCategory category,
+            @Param("status") ProductStatus status,
             Pageable pageable);
 
-    Optional<Product> findByIdAndDeletedAtIsNull(Long id);
+    Optional<Product> findByIdAndDeletedAtIsNull(Long productId);
 }
