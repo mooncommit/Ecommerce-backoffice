@@ -9,6 +9,9 @@ import com.example.ecommerce_backoffice.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +35,7 @@ public class ProductController {
 
     // 상품 다건 조회 API (페이징)
     @GetMapping
-    public ResponseEntity<Page<ProductListResponseDto>> getProducts(
+    public ResponseEntity<ProductPageResponseDto> getProducts(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) ProductStatus status,
@@ -40,10 +43,9 @@ public class ProductController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortOrder) {
-        Page<ProductListResponseDto> responseDto = productService.getProducts(
-                keyword, category, status, page, size, sortBy, sortOrder);
 
-        return ResponseEntity.ok(responseDto);
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(sortOrder)));
+        return ResponseEntity.ok(productService.getProducts(keyword, category, status, pageable));
     }
 
     // 상품 단건 조회 API

@@ -11,9 +11,7 @@ import com.example.ecommerce_backoffice.product.repository.ProductRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -46,21 +44,15 @@ public class ProductService {
 
     // 상품 다건 조회 (검색 + 필터 + 페이징 + 정렬)
     @Transactional(readOnly = true)
-    public Page<ProductListResponseDto> getProducts(
-            String keyword, ProductCategory category, ProductStatus status,
-            int page, int size, String sortBy, String sortOrder) {
-
-        // 정렬 설정
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
-
-        // 페이징 + 정렬 설정
-        Pageable pageable = PageRequest.of(page - 1, size, sort);
+    public ProductPageResponseDto getProducts(
+            String keyword, ProductCategory category, ProductStatus status, Pageable pageable) {
 
         // DB에서 검색 + 필터 + 페이징 조회
-        Page<Product> products = productRepository.findProducts(keyword, category, status, pageable);
+        Page<Product> productPage = productRepository.findProduct(keyword, category, status, pageable);
+        Page<ProductListResponseDto> dtoPage = productPage.map(ProductListResponseDto::new);
 
         // Product 엔티티를 응답 DTO로 변환 후 반환하기
-        return products.map(ProductListResponseDto::new);
+        return ProductPageResponseDto.from(dtoPage);
 
     }
 

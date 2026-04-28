@@ -17,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "(:keyword IS NULL OR p.name LIKE %:keyword%) AND " +
             "(:category IS NULL OR p.category = :category) AND " +
             "(:status IS NULL OR p.status = :status)")
-    Page<Product> findProducts(
+    Page<Product> findProduct(
             @Param("keyword") String keyword,
             @Param("category")ProductCategory category,
             @Param("status")ProductStatus status,
