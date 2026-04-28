@@ -44,5 +44,16 @@ public class Product extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductStatus status;
+
+    // 상품 생성자
+    public Product(Admin admin, String name, ProductCategory category, Integer price, Integer stock, ProductStatus status) {
+        this.admin = admin;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.stock = stock;
+        this.status = status;
+    }
 }
+
 
