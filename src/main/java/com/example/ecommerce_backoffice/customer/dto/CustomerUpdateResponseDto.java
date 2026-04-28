@@ -1,17 +1,22 @@
 package com.example.ecommerce_backoffice.customer.dto;
 
+import com.example.ecommerce_backoffice.customer.entity.Customer;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class CustomerUpdateResponseDto {
 
-    private String name;
-    private String email;
-    private String phone;
+    private final String name;
+    private final String email;
+    private final String phone;
 
-    public CustomerUpdateResponseDto(String name, String email, String phone) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
+    public static CustomerUpdateResponseDto from(Customer customer) {
+        return new CustomerUpdateResponseDto(
+                        customer.getName(),
+                        customer.getEmail(),
+                        customer.getPhone()
+        );
     }
 }

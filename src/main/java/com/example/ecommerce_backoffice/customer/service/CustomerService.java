@@ -5,11 +5,10 @@ import com.example.ecommerce_backoffice.customer.dto.*;
 import com.example.ecommerce_backoffice.customer.entity.Customer;
 import com.example.ecommerce_backoffice.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,17 +18,12 @@ public class CustomerService {
 
     // 다건 조회
     @Transactional(readOnly = true)
-    public List<CustomerReadAllResponseDto> getCustomers() {
-        return customerRepository.findAllByDeletedAtIsNull().stream()
-                .map(customer -> new CustomerReadAllResponseDto(
-                        customer.getId(),
-                        customer.getName(),
-                        customer.getEmail(),
-                        customer.getPhone(),
-                        customer.getStatus(),
-                        customer.getCreatedAt()
-                ))
-                .collect(Collectors.toList());
+    public CustomerPageResponseDto getCustomerList(String keyword, CustomerStatus status, Pageable pageable) {
+
+        Page<Customer> customerPage = customerRepository.findCustomer(keyword, status, pageable);
+
+        Page<CustomerListResponseDto> dtoPage = customerPage.map(CustomerListResponseDto::from);
+        return CustomerPageResponseDto.from(dtoPage);
     }
 
     // 단건 조회
@@ -53,11 +47,7 @@ public class CustomerService {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(CustomerNotFoundException::new);
         customer.update(requestDto.getName(), requestDto.getEmail(), requestDto.getPhone());
-        return new CustomerUpdateResponseDto(
-                customer.getName(),
-                customer.getEmail(),
-                customer.getPhone()
-        );
+        return CustomerUpdateResponseDto.from(customer);
     }
 
     // 상태 변경
