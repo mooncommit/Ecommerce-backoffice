@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/admins")
 public class AuthController {
-    //속성
+
     private final AuthService authService;
 
-    //기능
+
 
     //회원가입
     @PostMapping("/signup")
