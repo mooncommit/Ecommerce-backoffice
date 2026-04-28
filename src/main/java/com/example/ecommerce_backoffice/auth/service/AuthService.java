@@ -15,11 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
 
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
@@ -31,14 +29,12 @@ public class AuthService {
      * 회원가입시 승인대기 상태 부여
      */
 
-
     @Transactional
     public Admin createRegister(SignupCreateRequestDto request) {
         if (authRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateEmailException();
         }
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-
 
         Admin admin = new Admin(
                 request.getName(),
@@ -47,7 +43,6 @@ public class AuthService {
                 request.getPhone(),
                 request.getRole(),
                 AdminStatus.PENDING
-
         );
 
         return authRepository.save(admin);
@@ -80,8 +75,6 @@ public class AuthService {
                 case REJECTED -> throw new InvalidAdminStatusException("거부된 계정");
             }
         }
-
-
 
         return admin;
     }

@@ -3,7 +3,7 @@ package com.example.ecommerce_backoffice.auth.controller;
 import com.example.ecommerce_backoffice.admin.entity.Admin;
 import com.example.ecommerce_backoffice.auth.dto.LoginRequestDto;
 import com.example.ecommerce_backoffice.auth.dto.SignupCreateRequestDto;
-import com.example.ecommerce_backoffice.auth.dto.SessionAdmin;
+import com.example.ecommerce_backoffice.common.dto.SessionAdmin;
 import com.example.ecommerce_backoffice.auth.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -33,7 +33,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> adminLogin(@Valid @RequestBody LoginRequestDto request, HttpSession session ) {
         Admin admin = authService.loginAdmin(request);
-        SessionAdmin sessionAdmin = new SessionAdmin(admin);
+        SessionAdmin sessionAdmin = new SessionAdmin(
+                admin.getId(),
+                admin.getEmail(),
+                admin.getRole()
+        );
         session.setAttribute("loginAdmin", sessionAdmin);
 
         return ResponseEntity.ok("로그인 성공!");
