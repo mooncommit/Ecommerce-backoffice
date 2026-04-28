@@ -15,12 +15,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -126,7 +124,7 @@ public class AdminService {
 
     // 내 프로필 조회
     @Transactional(readOnly = true)
-    public AdminGetProfileResponseDto getProfile(HttpSession session) {
+    public AdminProfileGetResponseDto getProfile(HttpSession session) {
         SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("admin");
 
         if (sessionAdmin == null) {
@@ -136,12 +134,12 @@ public class AdminService {
         Admin admin = adminRepository.findById(sessionAdmin.getId())
                 .orElseThrow(AdminNotFoundException::new);
 
-        return AdminGetProfileResponseDto.from(admin);
+        return AdminProfileGetResponseDto.from(admin);
     }
 
     // 내 프로필 수정
     @Transactional
-    public AdminPatchProfileResponseDto updateProfile(HttpSession session, AdminPatchProfileRequestDto request) {
+    public AdminProfilePatchResponseDto updateProfile(HttpSession session, AdminProfileRequestPatchDto request) {
         SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("admin");
 
         if (sessionAdmin == null) {
@@ -156,7 +154,7 @@ public class AdminService {
                 request.getEmail(),
                 request.getPhone()
         );
-        return AdminPatchProfileResponseDto.from(admin);
+        return AdminProfilePatchResponseDto.from(admin);
     }
 
     // 비밀번호 변경

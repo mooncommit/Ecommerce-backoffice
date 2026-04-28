@@ -6,14 +6,15 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class AdminGetProfileResponseDto {
+public class AdminProfilePatchResponseDto {
 
     private final String name;
     private final String email;
     private final String phone;
 
-    public static AdminGetProfileResponseDto from(Admin admin) {
-        return new AdminGetProfileResponseDto(
+    // 엔티티를 관리자 정보 수정 응답 DTO로 변환
+    public static AdminProfilePatchResponseDto from(Admin admin) {
+        return new AdminProfilePatchResponseDto(
                 admin.getName(),
                 admin.getEmail(),
                 admin.getPhone()

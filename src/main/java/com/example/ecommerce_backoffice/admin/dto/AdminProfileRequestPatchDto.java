@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 // 관리자 프로필 수정 요청 DTO
 @Getter
 @NoArgsConstructor
-public class AdminPatchProfileRequestDto {
+public class AdminProfileRequestPatchDto {
 
     @NotBlank(message = "이름은 필수 입력입니다.")
     private String name;

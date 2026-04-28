@@ -93,14 +93,14 @@ public class AdminController {
 
     // 내(로그인한 유저) 프로필 조회 API
     @GetMapping("/me")
-    public ResponseEntity<AdminGetProfileResponseDto> getProfile(HttpSession httpSession) {
+    public ResponseEntity<AdminProfileGetResponseDto> getProfile(HttpSession httpSession) {
         return ResponseEntity.ok(adminService.getProfile(httpSession));
     }
     // 내(로그인한 유저) 프로필 수정 API
     @PatchMapping("/me")
-    public ResponseEntity<AdminPatchProfileResponseDto> patchProfile(
+    public ResponseEntity<AdminProfilePatchResponseDto> patchProfile(
             HttpSession httpSession,
-            @Valid @RequestBody AdminPatchProfileRequestDto request
+            @Valid @RequestBody AdminProfileRequestPatchDto request
     ){
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProfile(httpSession, request));
     }
