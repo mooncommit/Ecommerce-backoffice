@@ -31,8 +31,7 @@ public class AdminController {
     @PostMapping("/{id}/reject")
     public ResponseEntity<AdminRejectResponseDto> rejectAdmin(
             @PathVariable("id") Long adminId,
-            @Valid @RequestBody AdminRejectRequestDto requestDto
-    ) {
+            @Valid @RequestBody AdminRejectRequestDto requestDto) {
         return ResponseEntity.ok(adminService.rejectAdmin(adminId, requestDto));
     }
 
@@ -49,8 +48,7 @@ public class AdminController {
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) AdminRole adminRole,
-            @RequestParam(required = false) AdminStatus adminStatus
-    ) {
+            @RequestParam(required = false) AdminStatus adminStatus) {
         return ResponseEntity.ok(adminService.getAdmins(pageable, keyword, adminRole, adminStatus));
     }
 
@@ -58,8 +56,7 @@ public class AdminController {
     @PatchMapping("/{id}")
     public ResponseEntity<AdminUpdateResponseDto> updateAdmin(
             @PathVariable Long id,
-            @Valid @RequestBody AdminUpdateRequestDto request
-    ) {
+            @Valid @RequestBody AdminUpdateRequestDto request) {
         return ResponseEntity.ok(adminService.updateAdmin(id, request));
     }
 
@@ -67,8 +64,7 @@ public class AdminController {
     @PatchMapping("/{id}/role")
     public ResponseEntity<AdminRoleUpdateResponseDto> roleUpdateAdmin(
             @PathVariable Long id,
-            @Valid @RequestBody AdminRoleUpdateRequestDto request
-    ) {
+            @Valid @RequestBody AdminRoleUpdateRequestDto request) {
         return ResponseEntity.ok(adminService.roleUpdateAdmin(id, request));
     }
 
@@ -76,8 +72,7 @@ public class AdminController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<AdminStatusUpdateResponseDto> statusUpdateAdmin(
             @PathVariable Long id,
-            @Valid @RequestBody AdminStatusUpdateRequestDto request
-    ) {
+            @Valid @RequestBody AdminStatusUpdateRequestDto request) {
         return ResponseEntity.ok(adminService.statusUpdateAdmin(id, request));
     }
 
@@ -85,8 +80,7 @@ public class AdminController {
     // 관리자 삭제 API
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAdmins(
-            @PathVariable Long id
-    ){
+            @PathVariable Long id){
             adminService.deleteAdmin(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -100,8 +94,7 @@ public class AdminController {
     @PatchMapping("/me")
     public ResponseEntity<AdminProfilePatchResponseDto> patchProfile(
             HttpSession httpSession,
-            @Valid @RequestBody AdminProfileRequestPatchDto request
-    ){
+            @Valid @RequestBody AdminProfileRequestPatchDto request){
         return ResponseEntity.status(HttpStatus.OK).body(adminService.updateProfile(httpSession, request));
     }
 
@@ -109,8 +102,7 @@ public class AdminController {
     @PatchMapping("/me/password")
     public ResponseEntity<AdminPasswordUpdateResponseDto> passwordUpdateAdmin(
             HttpSession httpSession,
-            @Valid @RequestBody AdminPasswordUpdateRequestDto request
-    ) {
+            @Valid @RequestBody AdminPasswordUpdateRequestDto request) {
         return ResponseEntity.ok(adminService.updateAdminPassword(httpSession, request));
     }
 }
