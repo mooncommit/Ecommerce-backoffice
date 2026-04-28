@@ -9,6 +9,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Table(name = "products")
@@ -23,36 +25,86 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "admin_id", nullable = false)
     private Admin admin;
 
-    // 상품명
+
     @Column(nullable = false, length = 255)
     private String name;
 
-    // 카테고리 (전자기기, 패션/의류, 식품)
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductCategory category;
 
-    // 가격
-    @Column(nullable = false)
-    private Integer price;
 
-    // 재고
     @Column(nullable = false)
-    private Integer stock;
+    private int price;
 
-    // 상품 상태 (ON_SALE, SOLD_OUT, DISCONTINUED)
+
+    @Column(nullable = false)
+    private int stock;
+
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductStatus status;
 
-    // 상품 생성자
-    public Product(Admin admin, String name, ProductCategory category, Integer price, Integer stock, ProductStatus status) {
+    private LocalDateTime deletedAt;
+
+
+    public Product(Admin admin, String name, ProductCategory category, int price, int stock, ProductStatus status) {
         this.admin = admin;
         this.name = name;
         this.category = category;
         this.price = price;
         this.stock = stock;
         this.status = status;
+    }
+
+
+    public void updateInfo(String name, ProductCategory category, int price) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
+    }
+
+
+    public void updateStock(int stock) {
+        this.stock = stock;
+
+
+        if (this.status == ProductStatus.DISCONTINUED) {
+            return;
+        }
+
+
+        if (this.stock <= 0) {
+            this.status = ProductStatus.SOLD_OUT;
+        } else {
+            this.status = ProductStatus.ON_SALE;
+        }
+    }
+
+
+    public void updateStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+
+    public void decreaseStock(int quantity) {
+        this.stock -= quantity;
+        if (this.stock <= 0) {
+            this.status = ProductStatus.SOLD_OUT;
+        }
+    }
+
+    public void restoreStock(int quantity) {
+        this.stock += quantity;
+        if (this.status != ProductStatus.DISCONTINUED) {
+            this.status = ProductStatus.ON_SALE;
+        }
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
     }
 }
 
