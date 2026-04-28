@@ -22,22 +22,22 @@ public class AdminController {
     private final AdminService adminService;
 
     // 관리자 승인 API
-    @PostMapping("/{id}/approve")
-    public ResponseEntity<AdminApproveResponseDto> approveAdmin(@PathVariable("id") Long adminId) {
+    @PostMapping("/{adminId}/approve")
+    public ResponseEntity<AdminApproveResponseDto> approveAdmin(@PathVariable Long adminId) {
         return ResponseEntity.ok(adminService.approveAdmin(adminId));
     }
 
     // 관리자 거부 API
-    @PostMapping("/{id}/reject")
+    @PostMapping("/{adminId}/reject")
     public ResponseEntity<AdminRejectResponseDto> rejectAdmin(
-            @PathVariable("id") Long adminId,
+            @PathVariable Long adminId,
             @Valid @RequestBody AdminRejectRequestDto requestDto) {
         return ResponseEntity.ok(adminService.rejectAdmin(adminId, requestDto));
     }
 
     // 관리자 단건 조회 API
-    @GetMapping("/{id}")
-    public ResponseEntity<AdminDetailResponseDto> getAdmin(@PathVariable("id") Long adminId) {
+    @GetMapping("/{adminId}")
+    public ResponseEntity<AdminDetailResponseDto> getAdmin(@PathVariable Long adminId) {
         return ResponseEntity.ok(adminService.getAdmin(adminId));
     }
 
@@ -53,35 +53,35 @@ public class AdminController {
     }
 
     // 관리자 정보 수정 API
-    @PatchMapping("/{id}")
+    @PatchMapping("/{adminId}")
     public ResponseEntity<AdminUpdateResponseDto> updateAdmin(
-            @PathVariable Long id,
+            @PathVariable Long adminId,
             @Valid @RequestBody AdminUpdateRequestDto request) {
-        return ResponseEntity.ok(adminService.updateAdmin(id, request));
+        return ResponseEntity.ok(adminService.updateAdmin(adminId, request));
     }
 
     // 관리자 역할 수정 API
-    @PatchMapping("/{id}/role")
+    @PatchMapping("/{adminId}/role")
     public ResponseEntity<AdminRoleUpdateResponseDto> roleUpdateAdmin(
-            @PathVariable Long id,
+            @PathVariable Long adminId,
             @Valid @RequestBody AdminRoleUpdateRequestDto request) {
-        return ResponseEntity.ok(adminService.roleUpdateAdmin(id, request));
+        return ResponseEntity.ok(adminService.roleUpdateAdmin(adminId, request));
     }
 
     // 관리자 상태 수정 API
-    @PatchMapping("/{id}/status")
+    @PatchMapping("/{adminId}/status")
     public ResponseEntity<AdminStatusUpdateResponseDto> statusUpdateAdmin(
-            @PathVariable Long id,
+            @PathVariable Long adminId,
             @Valid @RequestBody AdminStatusUpdateRequestDto request) {
-        return ResponseEntity.ok(adminService.statusUpdateAdmin(id, request));
+        return ResponseEntity.ok(adminService.statusUpdateAdmin(adminId, request));
     }
 
 
     // 관리자 삭제 API
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{adminId}")
     public ResponseEntity<Void> deleteAdmins(
-            @PathVariable Long id){
-            adminService.deleteAdmin(id);
+            @PathVariable Long adminId){
+            adminService.deleteAdmin(adminId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

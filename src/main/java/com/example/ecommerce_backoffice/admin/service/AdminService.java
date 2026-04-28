@@ -77,8 +77,8 @@ public class AdminService {
 
     // 관리자 정보 수정
     @Transactional
-    public AdminUpdateResponseDto updateAdmin(Long id, AdminUpdateRequestDto request) {
-        Admin admin = adminRepository.findById(id)
+    public AdminUpdateResponseDto updateAdmin(Long adminId, AdminUpdateRequestDto request) {
+        Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
         admin.update(
@@ -92,8 +92,8 @@ public class AdminService {
 
     // 관리자 역할 수정
     @Transactional
-    public AdminRoleUpdateResponseDto roleUpdateAdmin(Long id, AdminRoleUpdateRequestDto request) {
-        Admin admin = adminRepository.findById(id)
+    public AdminRoleUpdateResponseDto roleUpdateAdmin(Long adminId, AdminRoleUpdateRequestDto request) {
+        Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
         admin.roleUpdate(request.getRole());
@@ -104,8 +104,8 @@ public class AdminService {
 
     // 관리자 상태 수정
     @Transactional
-    public AdminStatusUpdateResponseDto statusUpdateAdmin(Long id, AdminStatusUpdateRequestDto request) {
-        Admin admin = adminRepository.findById(id)
+    public AdminStatusUpdateResponseDto statusUpdateAdmin(Long adminId, AdminStatusUpdateRequestDto request) {
+        Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
         admin.statusUpdate(request.getStatus());
