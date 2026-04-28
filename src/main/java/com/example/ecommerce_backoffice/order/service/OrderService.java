@@ -37,7 +37,7 @@ public class OrderService {
     @Transactional
     public OrderCreateResponseDto createOrder(OrderCreateRequestDto requestDto, HttpSession session) {
 
-        SessionAdmin = sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
+        SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
         Admin admin = adminRepository.findById(sessionAdmin.getId()).orElseThrow(AdminNotFoundException::new);
 
         Customer customer = customerRepository.findById(requestDto.getCustomerId())
@@ -46,17 +46,14 @@ public class OrderService {
         Product product = productRepository.findById(requestDto.getProductId())
                 .orElseThrow(ProductNotFoundException::new);
 
-        // 단종 상품 주문 불가
         if (product.getStatus() == ProductStatus.DISCONTINUED) {
             throw new DiscontinuedProductException();
         }
 
-        // 품절 상품 주문 불가
         if (product.getStatus() == ProductStatus.SOLD_OUT) {
             throw new SoldOutProductException();
         }
 
-        // 재고 부족 검증
         if (product.getStock() < requestDto.getQuantity()) {
             throw new OutOfStockException();
         }
@@ -69,11 +66,9 @@ public class OrderService {
 
         int totalPrice = product.getPrice() * requestDto.getQuantity();
 
-        // Order 생성
         Order order = new Order(orderNumber, customer, admin, totalPrice, OrderStatus.PREPARING);
         orderRepository.save(order);
 
-        // OrderItem 생성
         OrderItem orderItem = new OrderItem(order, product, product.getName(), product.getPrice(), requestDto.getQuantity());
         orderItemRepository.save(orderItem);
 
@@ -84,10 +79,9 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderDetailResponseDto getOrder(Long orderId) {
-        // 주문 조회
+
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
-        // 주문 아이템 조회
         OrderItem orderItem = orderItemRepository.findByOrder(order).orElseThrow(OrderItemNotFoundException::new);
 
         return OrderDetailResponseDto.from(order, orderItem);
@@ -109,7 +103,7 @@ public class OrderService {
 
     @Transactional
     public void cancelOrder(Long orderId, @Valid OrderCancelRequestDto requestDto) {
-        // 주문 조회
+
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         // 준비중 상태에서만 취소 가능
@@ -119,22 +113,17 @@ public class OrderService {
 
         order.cancel(requestDto.getCancelReason());
 
-        // 주문 아이템 조회
         OrderItem orderItem = orderItemRepository.findByOrder(order).orElseThrow(OrderItemNotFoundException::new);
 
-        // 상품 조회
         Product product = productRepository.findById(orderItem.getProduct().getId()).orElseThrow(ProductNotFoundException::new);
 
         // 재고 복구
         product.restoreStock(orderItem.getQuantity());
-
-        // 주문 취소 처리
-        order.cancel(requestDto.getCancelReason());
     }
 
     @Transactional
     public void updateOrderStatus(Long orderId) {
-        // 주문 조회
+
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         // 취소된 주문은 상태 변경 불가

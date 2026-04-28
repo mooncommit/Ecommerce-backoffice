@@ -20,7 +20,7 @@ public class OrderDetailResponseDto {
     private final String productName;
     private final int quantity;
     private final int totalPrice;
-    private final LocalDateTime orderdAt;
+    private final LocalDateTime orderedAt;
     private final OrderStatus status;
     private String adminName;
     private String adminEmail;
@@ -32,7 +32,7 @@ public class OrderDetailResponseDto {
             order.getOrderNumber(),
             order.getCustomer().getName(),
             order.getCustomer().getEmail(),
-            orderItem.getProduct().getName(),
+            orderItem.getProductName(),
             orderItem.getQuantity(),
             order.getTotalPrice(),
             order.getCreatedAt(),
