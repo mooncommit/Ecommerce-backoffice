@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * 관리자 테이블
- */
 @Getter
 @Entity
 @Table(name = "admins")
@@ -42,14 +39,8 @@ public class Admin extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AdminStatus status;
-
-    // 관리자 승인 시각
     private LocalDateTime approvedAt;
-
-    // 관리자 거부 시간
     private LocalDateTime rejectedAt;
-
-    // 관리자 거부 사유
     private String rejectionReason;
 
     public Admin(String name, String email, String password, String phone, AdminRole role, AdminStatus status) {
