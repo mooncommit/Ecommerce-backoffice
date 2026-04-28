@@ -1,5 +1,6 @@
 package com.example.ecommerce_backoffice.order.service;
 
+import com.example.ecommerce_backoffice.admin.entity.Admin;
 import com.example.ecommerce_backoffice.common.exception.*;
 import com.example.ecommerce_backoffice.customer.entity.Customer;
 import com.example.ecommerce_backoffice.customer.repository.CustomerRepository;
@@ -12,6 +13,7 @@ import com.example.ecommerce_backoffice.order.repository.OrderRepository;
 import com.example.ecommerce_backoffice.product.entity.Product;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import com.example.ecommerce_backoffice.product.repository.ProductRepository;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,7 +35,10 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public OrderCreateResponseDto createOrder(OrderCreateRequestDto requestDto) {
+    public OrderCreateResponseDto createOrder(OrderCreateRequestDto requestDto, HttpSession session) {
+
+        SessionAdmin = sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
+        Admin admin = adminRepository.findById(sessionAdmin.getId()).orElseThrow(AdminNotFoundException::new);
 
         Customer customer = customerRepository.findById(requestDto.getCustomerId())
                 .orElseThrow(CustomerNotFoundException::new);
@@ -65,7 +70,7 @@ public class OrderService {
         int totalPrice = product.getPrice() * requestDto.getQuantity();
 
         // Order 생성
-        Order order = new Order(orderNumber, customer, null, totalPrice, OrderStatus.PREPARING);
+        Order order = new Order(orderNumber, customer, admin, totalPrice, OrderStatus.PREPARING);
         orderRepository.save(order);
 
         // OrderItem 생성
@@ -78,14 +83,14 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderGetOneResponseDto getOrder(Long orderId) {
+    public OrderDetailResponseDto getOrder(Long orderId) {
         // 주문 조회
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         // 주문 아이템 조회
         OrderItem orderItem = orderItemRepository.findByOrder(order).orElseThrow(OrderItemNotFoundException::new);
 
-        return OrderGetOneResponseDto.from(order, orderItem);
+        return OrderDetailResponseDto.from(order, orderItem);
     }
 
     @Transactional(readOnly = true)
@@ -112,7 +117,6 @@ public class OrderService {
             throw new OrderCancelNotAllowedException();
         }
 
-        // 주문 취소 처리
         order.cancel(requestDto.getCancelReason());
 
         // 주문 아이템 조회
@@ -150,6 +154,5 @@ public class OrderService {
         } else {
             throw new InvalidOrderStatusException();
         }
-
     }
 }

@@ -3,6 +3,7 @@ package com.example.ecommerce_backoffice.order.controller;
 import com.example.ecommerce_backoffice.order.dto.*;
 import com.example.ecommerce_backoffice.order.enums.OrderStatus;
 import com.example.ecommerce_backoffice.order.service.OrderService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,12 +21,12 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderCreateResponseDto> createOrder(@Valid @RequestBody OrderCreateRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(requestDto));
+    public ResponseEntity<OrderCreateResponseDto> createOrder(@Valid @RequestBody OrderCreateRequestDto requestDto, HttpSession session) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(requestDto, session));
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderGetOneResponseDto> getOrder(@PathVariable Long orderId) {
+    public ResponseEntity<OrderDetailResponseDto> getOrder(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderService.getOrder(orderId));
     }
 

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class OrderGetOneResponseDto {
+public class OrderDetailResponseDto {
 
     private final Long id;
     private final String orderNumber;
@@ -26,8 +26,8 @@ public class OrderGetOneResponseDto {
     private String adminEmail;
     private AdminRole adminRole;
 
-    public static OrderGetOneResponseDto from(Order order, OrderItem orderItem) {
-        OrderGetOneResponseDto dto = new OrderGetOneResponseDto(
+    public static OrderDetailResponseDto from(Order order, OrderItem orderItem) {
+        OrderDetailResponseDto dto = new OrderDetailResponseDto(
             order.getId(),
             order.getOrderNumber(),
             order.getCustomer().getName(),
