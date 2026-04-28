@@ -25,15 +25,15 @@ public class ProductDetailResponseDto {
 
     public static ProductDetailResponseDto from(Product product) {
         return new ProductDetailResponseDto(
-        product.getId(),
-        product.getName(),
-        product.getCategory(),
-        product.getPrice(),
-        product.getStock(),
-        product.getStatus(),
-        product.getCreatedAt(),
-        product.getAdmin().getName(),
-        product.getAdmin().getEmail()
+                product.getId(),
+                product.getName(),
+                product.getCategory(),
+                product.getPrice(),
+                product.getStock(),
+                product.getStatus(),
+                product.getCreatedAt(),
+                product.getAdmin().getName(),
+                product.getAdmin().getEmail()
         );
     }
 }

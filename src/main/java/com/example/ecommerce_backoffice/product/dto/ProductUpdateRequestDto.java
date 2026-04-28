@@ -10,13 +10,13 @@ import lombok.Getter;
 @Getter
 public class ProductUpdateRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "상품명은 필수 입력입니다.")
     private String name;
 
-    @NotNull
+    @NotNull(message = "카테고리는 필수 입력입니다.")
     private ProductCategory category;
 
-    @Min(0)
+    @Min(value = 0, message = "가격은 0 이상이어야 합니다.")
     private int price;
 }
 

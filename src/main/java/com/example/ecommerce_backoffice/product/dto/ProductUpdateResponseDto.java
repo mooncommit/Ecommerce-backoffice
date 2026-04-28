@@ -5,7 +5,6 @@ import com.example.ecommerce_backoffice.product.entity.Product;
 import com.example.ecommerce_backoffice.product.enums.ProductCategory;
 import com.example.ecommerce_backoffice.product.enums.ProductStatus;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;

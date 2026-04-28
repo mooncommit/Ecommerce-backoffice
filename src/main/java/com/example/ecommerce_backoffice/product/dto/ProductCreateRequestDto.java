@@ -11,19 +11,19 @@ import lombok.Getter;
 // 상품 등록 요청 DTO
 @Getter
 public class ProductCreateRequestDto {
-    @NotBlank
+    @NotBlank(message = "상품명은 필수 입력입니다.")
     private String name;
 
-    @NotNull
+    @NotNull(message = "카테고리는 필수 입력입니다.")
     private ProductCategory category;
 
-    @Min(0)
+    @Min(value = 0, message = "가격은 0 이상이어야 합니다.")
     private int price;
 
-    @Min(0)
+    @Min(value = 0, message = "재고는 0 이상이어야 합니다.")
     private int stock;
 
-    @NotNull
+    @NotNull(message = "상품 상태는 필수 입력입니다.")
     private ProductStatus status;
 
 }

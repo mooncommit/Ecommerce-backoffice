@@ -15,7 +15,7 @@ public class ProductPageResponseDto {
     private final int pageSize;
     private final Long totalCount;
     private final int totalPages;
-    private final List<ProductListResponseDto> ProductList;
+    private final List<ProductListResponseDto> productList;
 
     public static ProductPageResponseDto from(Page<ProductListResponseDto> page) {
         return new ProductPageResponseDto(
