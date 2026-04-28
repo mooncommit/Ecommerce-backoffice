@@ -62,7 +62,6 @@ public class AuthService {
         Admin admin = authRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new InvalidPasswordException());
 
-        // 암호화를 했기 때문에 패스워드인코더에서 입력된 비번과 어드민조회비번이랑 매치가 될때만 통과
         if (!passwordEncoder.matches(request.getPassword(), admin.getPassword())) {
             throw new InvalidPasswordException();
         }
