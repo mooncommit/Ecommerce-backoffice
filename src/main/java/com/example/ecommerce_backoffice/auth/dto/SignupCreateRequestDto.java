@@ -3,7 +3,6 @@ package com.example.ecommerce_backoffice.auth.dto;
 import com.example.ecommerce_backoffice.admin.enums.AdminRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 

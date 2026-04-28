@@ -1,6 +1,4 @@
 package com.example.ecommerce_backoffice.common.dto;
-
-import com.example.ecommerce_backoffice.admin.entity.Admin;
 import com.example.ecommerce_backoffice.admin.enums.AdminRole;
 import lombok.Getter;
 
