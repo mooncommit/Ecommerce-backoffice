@@ -1,4 +1,4 @@
-package com.example.ecommerce_backoffice.customer.contoller;
+package com.example.ecommerce_backoffice.customer.controller;
 
 import com.example.ecommerce_backoffice.customer.dto.*;
 import com.example.ecommerce_backoffice.customer.enums.CustomerStatus;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/customers")
 public class CustomerController {
 
-    // 속성
     private final CustomerService customerService;
 
 
@@ -47,6 +46,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.updateCustomer(customerId, requestDto));
     }
 
+    // 상태 변경
     @PatchMapping("/{customerId}/status")
     public ResponseEntity<Void> updateStatus(@PathVariable Long customerId, @Valid @RequestBody CustomerUpdateStatusRequestDto requestDto) {
         customerService.updateStatus(customerId, requestDto);
