@@ -32,11 +32,27 @@ public class Customer extends BaseEntity {
     @Column(nullable = false)
     private CustomerStatus status;
 
+    private LocalDateTime deletedAt;
+
 
     public Customer(String name, String email, String phone) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.status = CustomerStatus.ACTIVE; // 가입시 활성화 상태
+    }
+
+    public void update(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public void updateStatus(CustomerStatus status) {
+        this.status = status;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
     }
 }
