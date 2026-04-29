@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,10 +78,9 @@ public class AdminController {
 
     // 관리자 삭제 API
     @DeleteMapping("/{adminId}")
-    public ResponseEntity<Void> deleteAdmin(
+    public ResponseEntity<String> deleteAdmin(
             @PathVariable Long adminId) {
-        adminService.deleteAdmin(adminId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok(adminService.deleteAdmin(adminId));
     }
 
     // 내(로그인한 유저) 프로필 조회 API
