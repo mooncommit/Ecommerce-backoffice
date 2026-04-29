@@ -44,16 +44,15 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> adminLogout(@SessionAttribute(name = "loginAdmin", required = false)
+    public ResponseEntity<String> adminLogout(@SessionAttribute(name = "loginAdmin", required = false)
                                             SessionAdmin sessionAdmin,
                                             HttpSession session) {
         if (sessionAdmin==null){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(401).body("이미 만료된 세션입니다.");
         }
 
         session.invalidate();
-        return ResponseEntity.ok().build();
-        //return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok("로그아웃 성공!");
     }
 }
 
