@@ -15,4 +15,6 @@ public class OrderCreateRequestDto {
 
     @Min(value = 1, message = "수량은 1이상이어야 합니다.")
     private int quantity;
+
+    private boolean csOrder;
 }

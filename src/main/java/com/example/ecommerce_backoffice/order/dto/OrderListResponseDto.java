@@ -20,7 +20,6 @@ public class OrderListResponseDto {
     private final int totalPrice;
     private final OrderStatus status;
     private final LocalDateTime orderedAt;
-    private final String adminName;
 
     public static OrderListResponseDto from(Order order, OrderItem orderItem) {
         return new OrderListResponseDto(
@@ -31,8 +30,7 @@ public class OrderListResponseDto {
                 orderItem.getQuantity(),
                 order.getTotalPrice(),
                 order.getStatus(),
-                order.getCreatedAt(),
-                order.getAdmin() != null ? order.getAdmin().getName() : null
+                order.getCreatedAt()
         );
     }
 }

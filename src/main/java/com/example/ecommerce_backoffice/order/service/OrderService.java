@@ -40,8 +40,12 @@ public class OrderService {
     @Transactional
     public OrderCreateResponseDto createOrder(OrderCreateRequestDto requestDto, HttpSession session) {
 
-        SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
-        Admin admin = adminRepository.findById(sessionAdmin.getId()).orElseThrow(AdminNotFoundException::new);
+        Admin admin = null;
+
+        if (requestDto.isCsOrder()) {
+            SessionAdmin sessionAdmin = (SessionAdmin) session.getAttribute("loginAdmin");
+            admin = adminRepository.findById(sessionAdmin.getId()).orElseThrow(AdminNotFoundException::new);
+        }
 
         Customer customer = customerRepository.findById(requestDto.getCustomerId())
                 .orElseThrow(CustomerNotFoundException::new);
@@ -81,11 +85,15 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderDetailResponseDto getOrder(Long orderId) {
+    public Object getOrder(Long orderId) {
 
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         OrderItem orderItem = orderItemRepository.findByOrder(order).orElseThrow(OrderItemNotFoundException::new);
+
+        if (order.getAdmin() != null) {
+            return OrderDetailCsResponseDto.from(order, orderItem);
+        }
 
         return OrderDetailResponseDto.from(order, orderItem);
     }
@@ -95,9 +103,14 @@ public class OrderService {
 
         Page<Order> orderPage = orderRepository.findOrder(keyword,status,pageable);
 
-        Page<OrderListResponseDto> dtoPage = orderPage.map(order -> {
+        Page<Object> dtoPage = orderPage.map(order -> {
             OrderItem orderItem = orderItemRepository.findByOrder(order)
                     .orElseThrow(OrderItemNotFoundException::new);
+
+            if (order.getAdmin() != null) {
+                return (Object) OrderListCsResponseDto.from(order, orderItem);
+            }
+
             return OrderListResponseDto.from(order, orderItem);
         });
 
@@ -125,7 +138,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderStatus(Long orderId) {
+    public OrderStatusUpdateResponseDto updateOrderStatus(Long orderId) {
 
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
@@ -146,5 +159,7 @@ public class OrderService {
         } else {
             throw new InvalidOrderStatusException();
         }
+
+        return OrderStatusUpdateResponseDto.from(order);
     }
 }
