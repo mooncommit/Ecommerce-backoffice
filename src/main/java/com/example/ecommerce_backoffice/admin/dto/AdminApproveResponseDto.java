@@ -15,17 +15,13 @@ public class AdminApproveResponseDto {
     private final Long id;
     private final AdminStatus status;
     private final LocalDateTime approvedAt;
-    private final LocalDateTime rejectedAt;
-    private final String rejectionReason;
 
     // 엔티티를 승인 응답 DTO로 변환
     public static AdminApproveResponseDto from(Admin admin) {
         return new AdminApproveResponseDto(
                 admin.getId(),
                 admin.getStatus(),
-                admin.getApprovedAt(),
-                admin.getRejectedAt(),
-                admin.getRejectionReason()
+                admin.getApprovedAt()
         );
     }
 }
