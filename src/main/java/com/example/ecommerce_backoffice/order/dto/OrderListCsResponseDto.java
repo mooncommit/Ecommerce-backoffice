@@ -1,6 +1,5 @@
 package com.example.ecommerce_backoffice.order.dto;
 
-import com.example.ecommerce_backoffice.admin.enums.AdminRole;
 import com.example.ecommerce_backoffice.order.entity.Order;
 import com.example.ecommerce_backoffice.order.entity.OrderItem;
 import com.example.ecommerce_backoffice.order.enums.OrderStatus;
@@ -11,29 +10,29 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class OrderDetailResponseDto {
+public class OrderListCsResponseDto {
 
     private final Long id;
     private final String orderNumber;
     private final String customerName;
-    private final String customerEmail;
     private final String productName;
     private final int quantity;
     private final int totalPrice;
-    private final LocalDateTime orderedAt;
     private final OrderStatus status;
+    private final LocalDateTime orderedAt;
+    private final String adminName;
 
-    public static OrderDetailResponseDto from(Order order, OrderItem orderItem) {
-        return new OrderDetailResponseDto(
-            order.getId(),
-            order.getOrderNumber(),
-            order.getCustomer().getName(),
-            order.getCustomer().getEmail(),
-            orderItem.getProductName(),
-            orderItem.getQuantity(),
-            order.getTotalPrice(),
-            order.getCreatedAt(),
-            order.getStatus()
+    public static OrderListCsResponseDto from(Order order, OrderItem orderItem) {
+        return new OrderListCsResponseDto(
+                order.getId(),
+                order.getOrderNumber(),
+                order.getCustomer().getName(),
+                orderItem.getProductName(),
+                orderItem.getQuantity(),
+                order.getTotalPrice(),
+                order.getStatus(),
+                order.getCreatedAt(),
+                order.getAdmin() != null ? order.getAdmin().getName() : null
         );
     }
 }

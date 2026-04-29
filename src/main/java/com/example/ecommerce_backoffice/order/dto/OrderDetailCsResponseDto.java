@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class OrderDetailResponseDto {
+public class OrderDetailCsResponseDto {
 
     private final Long id;
     private final String orderNumber;
@@ -22,18 +22,24 @@ public class OrderDetailResponseDto {
     private final int totalPrice;
     private final LocalDateTime orderedAt;
     private final OrderStatus status;
+    private final String adminName;
+    private final String adminEmail;
+    private final AdminRole adminRole;
 
-    public static OrderDetailResponseDto from(Order order, OrderItem orderItem) {
-        return new OrderDetailResponseDto(
-            order.getId(),
-            order.getOrderNumber(),
-            order.getCustomer().getName(),
-            order.getCustomer().getEmail(),
-            orderItem.getProductName(),
-            orderItem.getQuantity(),
-            order.getTotalPrice(),
-            order.getCreatedAt(),
-            order.getStatus()
+    public static OrderDetailCsResponseDto from(Order order, OrderItem orderItem) {
+        return new OrderDetailCsResponseDto(
+                order.getId(),
+                order.getOrderNumber(),
+                order.getCustomer().getName(),
+                order.getCustomer().getEmail(),
+                orderItem.getProductName(),
+                orderItem.getQuantity(),
+                order.getTotalPrice(),
+                order.getCreatedAt(),
+                order.getStatus(),
+                order.getAdmin().getName(),
+                order.getAdmin().getEmail(),
+                order.getAdmin().getRole()
         );
     }
 }

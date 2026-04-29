@@ -14,9 +14,9 @@ public class OrderPageResponseDto {
     private final int pageSize;
     private final Long totalCount;
     private final int totalPages;
-    private final List<OrderListResponseDto> orderList;
+    private final List<Object> orderList;
 
-    public static OrderPageResponseDto from(Page<OrderListResponseDto> page) {
+    public static OrderPageResponseDto from(Page<Object> page) {
         return new OrderPageResponseDto(
                 page.getNumber() + 1,
                 page.getSize(),
