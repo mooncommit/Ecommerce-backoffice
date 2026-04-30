@@ -32,26 +32,26 @@ public class CustomerController {
             @RequestParam(defaultValue = "desc") String direction) {
 
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(direction), sortBy));
-        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "고객 목록 조회 성공", customerService.getCustomerList(keyword, status, pageable)));
+        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "목록 조회 성공", customerService.getCustomerList(keyword, status, pageable)));
     }
 
     // 단건 조회
     @GetMapping("/{customerId}")
     public ResponseEntity<ApiResponseDto<CustomerDetailResponseDto>> getCustomer(@PathVariable Long customerId) {
-        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "고객 조회 성공", customerService.getCustomer(customerId)));
+        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "조회 성공", customerService.getCustomer(customerId)));
     }
 
     // 정보 수정
     @PatchMapping("/{customerId}")
     public ResponseEntity<ApiResponseDto<CustomerUpdateResponseDto>> updateCustomer(@PathVariable Long customerId, @Valid @RequestBody CustomerUpdateRequestDto requestDto) {
-        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "고객 정보 수정 성공", customerService.updateCustomer(customerId, requestDto)));
+        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "정보 수정 성공", customerService.updateCustomer(customerId, requestDto)));
     }
 
     // 상태 변경
     @PatchMapping("/{customerId}/status")
     public ResponseEntity<ApiResponseDto<Void>> updateStatus(@PathVariable Long customerId, @Valid @RequestBody CustomerUpdateStatusRequestDto requestDto) {
         customerService.updateStatus(customerId, requestDto);
-        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "고객 상태 변경 성공", null));
+        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "상태 변경 성공", null));
     }
 
     // 삭제
