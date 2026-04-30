@@ -116,12 +116,11 @@ public class AdminService {
 
     // 관리자 삭제
     @Transactional
-    public String deleteAdmin(Long adminId) {
+    public void deleteAdmin(Long adminId) {
         Admin foundAdmin = adminRepository.findById(adminId)
                 .orElseThrow(AdminNotFoundException::new);
 
         foundAdmin.changeStatus(AdminStatus.INACTIVE);
-        return "관리자가 삭제되었습니다.";
     }
 
     // 내 프로필 조회
