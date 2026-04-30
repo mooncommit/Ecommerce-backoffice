@@ -1,5 +1,6 @@
 package com.example.ecommerce_backoffice.order.controller;
 
+import com.example.ecommerce_backoffice.common.dto.ApiResponseDto;
 import com.example.ecommerce_backoffice.order.dto.*;
 import com.example.ecommerce_backoffice.order.enums.OrderStatus;
 import com.example.ecommerce_backoffice.order.service.OrderService;
@@ -21,17 +22,17 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderCreateResponseDto> createOrder(@Valid @RequestBody OrderCreateRequestDto requestDto, HttpSession session) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(requestDto, session));
+    public ResponseEntity<ApiResponseDto<OrderCreateResponseDto>> createOrder(@Valid @RequestBody OrderCreateRequestDto requestDto, HttpSession session) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseDto.success(HttpStatus.CREATED, "주문이 생성되었습니다.", orderService.createOrder(requestDto, session)));
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<?> getOrder(@PathVariable Long orderId) {
-        return ResponseEntity.ok(orderService.getOrder(orderId));
+    public ResponseEntity<ApiResponseDto<?>> getOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "주문 조회 성공", orderService.getOrder(orderId)));
     }
 
     @GetMapping
-    public ResponseEntity<OrderPageResponseDto> getOrderList(
+    public ResponseEntity<ApiResponseDto<OrderPageResponseDto>> getOrderList(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String keyword,
@@ -40,17 +41,17 @@ public class OrderController {
             @RequestParam(defaultValue = "desc") String direction
     ) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.fromString(direction), sortBy));
-        return ResponseEntity.ok(orderService.getOrderList(keyword, status, pageable));
+        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "주문 목록 조회 성공", orderService.getOrderList(keyword, status, pageable)));
     }
 
     @PatchMapping("/{orderId}")
-    public ResponseEntity<String> cancelOrder(@PathVariable Long orderId, @Valid @RequestBody OrderCancelRequestDto requestDto) {
+    public ResponseEntity<ApiResponseDto<String>> cancelOrder(@PathVariable Long orderId, @Valid @RequestBody OrderCancelRequestDto requestDto) {
         orderService.cancelOrder(orderId, requestDto);
-        return ResponseEntity.ok("주문이 취소되었습니다.");
+        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "주문이 취소되었습니다.", "취소 완료"));
     }
 
     @PatchMapping("/{orderId}/status")
-    public ResponseEntity<OrderStatusUpdateResponseDto> updateOrderStatus(@PathVariable Long orderId) {
-        return ResponseEntity.ok(orderService.updateOrderStatus(orderId));
+    public ResponseEntity<ApiResponseDto<OrderStatusUpdateResponseDto>> updateOrderStatus(@PathVariable Long orderId) {
+        return ResponseEntity.ok(ApiResponseDto.success(HttpStatus.OK, "주문 상태가 변경되었습니다.", orderService.updateOrderStatus(orderId)));
     }
 }
